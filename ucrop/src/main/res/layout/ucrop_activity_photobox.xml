@@ -21,7 +21,6 @@
             android:id="@+id/toolbar_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            fontPath="fonts/test.ttf"
             android:text="@string/ucrop_label_edit_photo"
             android:layout_centerVertical="true"
             android:ellipsize="end"
