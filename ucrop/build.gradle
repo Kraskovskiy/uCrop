@@ -9,7 +9,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 24
         versionCode 22
-        versionName "2.2.0-native"
+        versionName "2.2.0"
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -33,5 +33,6 @@ android {
 
 dependencies {
     compile 'com.android.support:appcompat-v7:24.2.0'
+    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
 }
