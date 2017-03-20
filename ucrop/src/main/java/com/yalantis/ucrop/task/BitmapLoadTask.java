@@ -112,9 +112,9 @@ public class BitmapLoadTask extends AsyncTask<Void, Void, BitmapLoadTask.BitmapW
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFileDescriptor(fileDescriptor, null, options);
-        if (options.outWidth == -1 || options.outHeight == -1) {
+       /* if (options.outWidth == -1 || options.outHeight == -1) {
             return new BitmapWorkerResult(new IllegalArgumentException("Bounds for bitmap could not be retrieved from the Uri: [" + mInputUri + "]"));
-        }
+        }*/
 
         options.inSampleSize = BitmapLoadUtils.calculateInSampleSize(options, mRequiredWidth, mRequiredHeight);
         options.inJustDecodeBounds = false;
