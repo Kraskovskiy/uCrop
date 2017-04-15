@@ -4,7 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -53,7 +55,28 @@
             android:id="@+id/ucrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="0"/>
+            android:alpha="0"
+            android:layout_marginBottom="@dimen/ucrop_height_crop_aspect_ratio_text">
+
+        </com.yalantis.ucrop.view.UCropView>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/ucrop_TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ucrop_EditTextHint"
+            android:hint="@string/ucrop_add_a_caption"
+            android:layout_gravity="bottom">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:id="@+id/ucrop_editText"
+            android:textColor="@color/ucrop_textColorWhite"
+            android:imeOptions="flagNoExtractUi"
+            android:maxLines="1" />
+        </android.support.design.widget.TextInputLayout>
 
     </FrameLayout>
 

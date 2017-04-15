@@ -41,6 +41,14 @@
         <item name="android:textSize">@dimen/ucrop_text_size_widget_text</item>
     </style>
 
+    <style name="ucrop_EditTextHint" parent="TextAppearance.AppCompat">
+        <item name="colorAccent">@color/ucrop_textColorWhite</item>
+        <item name="android:textColorHint">@color/ucrop_textColorWhite</item>
+        <item name="colorControlNormal">@color/ucrop_textColorWhite</item>
+        <item name="colorControlActivated">@color/ucrop_color_toolbar</item>
+        <item name="colorControlHighlight">@color/ucrop_textColorWhite</item>
+    </style>
+
     <style name="ucrop_AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

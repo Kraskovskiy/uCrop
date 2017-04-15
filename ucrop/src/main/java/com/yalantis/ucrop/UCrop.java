@@ -39,6 +39,7 @@ public class UCrop {
     public static final String EXTRA_OUTPUT_CROP_ASPECT_RATIO = EXTRA_PREFIX + ".CropAspectRatio";
     public static final String EXTRA_OUTPUT_IMAGE_WIDTH = EXTRA_PREFIX + ".ImageWidth";
     public static final String EXTRA_OUTPUT_IMAGE_HEIGHT = EXTRA_PREFIX + ".ImageHeight";
+    public static final String EXTRA_OUTPUT_IMAGE_DESCRIPTIONS = EXTRA_PREFIX + ".Descriptions";
     public static final String EXTRA_ERROR = EXTRA_PREFIX + ".Error";
 
     public static final String EXTRA_ASPECT_RATIO_X = EXTRA_PREFIX + ".AspectRatioX";
@@ -250,6 +251,7 @@ public class UCrop {
 
         public static final String EXTRA_ASPECT_RATIO_SELECTED_BY_DEFAULT = EXTRA_PREFIX + ".AspectRatioSelectedByDefault";
         public static final String EXTRA_ASPECT_RATIO_OPTIONS = EXTRA_PREFIX + ".AspectRatioOptions";
+        public static final String EXTRA_SHOW_DESCRIPTIONS = EXTRA_PREFIX + ".descriptionsOptions";
 
 
         private final Bundle mOptionBundle;
@@ -353,6 +355,13 @@ public class UCrop {
          */
         public void setShowCropGrid(boolean show) {
             mOptionBundle.putBoolean(EXTRA_SHOW_CROP_GRID, show);
+        }
+
+        /**
+         * @param show - set to true if you want to see a crop grid/guidelines on top of an image
+         */
+        public void setShowDescriptions(boolean show) {
+            mOptionBundle.putBoolean(EXTRA_SHOW_DESCRIPTIONS, show);
         }
 
         /**
