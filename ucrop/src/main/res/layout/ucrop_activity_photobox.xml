@@ -1,8 +1,7 @@
-<RelativeLayout
-    android:id="@+id/ucrop_photobox"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ucrop_photobox"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:descendantFocusability="beforeDescendants"
@@ -15,26 +14,26 @@
         android:background="@drawable/ucrop_tacita_bg"
         android:gravity="center_vertical"
         android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:contentInsetStartWithNavigation="0dp"
-        app:popupTheme="@style/ucrop_AppTheme.PopupOverlay"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        app:popupTheme="@style/ucrop_AppTheme.PopupOverlay">
 
         <TextView
             android:id="@+id/toolbar_title"
+            fontPath="fonts/test.ttf"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="@string/ucrop_label_edit_photo"
-            fontPath="fonts/test.ttf"
             android:layout_centerVertical="true"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="@string/ucrop_label_edit_photo"
             android:textColor="@color/ucrop_textColorPrimary"
             android:textSize="@dimen/ucrop_textSize40"
-            tools:ignore="MissingPrefix"/>
+            tools:ignore="MissingPrefix" />
 
     </android.support.v7.widget.Toolbar>
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/ucrop_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -46,17 +45,18 @@
             android:id="@+id/image_view_logo"
             android:layout_width="200dp"
             android:layout_height="200dp"
+            android:layout_centerInParent="true"
             android:layout_gravity="center"
             app:srcCompat="@drawable/ucrop_vector_ic_crop"
             tools:background="@drawable/ucrop_vector_ic_crop"
-            tools:ignore="MissingPrefix"/>
+            tools:ignore="MissingPrefix" />
 
         <com.yalantis.ucrop.view.UCropView
             android:id="@+id/ucrop"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="0"
-            android:layout_marginBottom="@dimen/ucrop_height_crop_aspect_ratio_text">
+            android:layout_above="@+id/ucrop_TextInputLayout"
+            android:alpha="0">
 
         </com.yalantis.ucrop.view.UCropView>
 
@@ -64,20 +64,22 @@
             android:id="@+id/ucrop_TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ucrop_EditTextHint"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
             android:hint="@string/ucrop_add_a_caption"
-            android:layout_gravity="bottom">
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:ems="10"
-            android:id="@+id/ucrop_editText"
-            android:textColor="@color/ucrop_textColorWhite"
-            android:imeOptions="flagNoExtractUi"
-            android:maxLines="1" />
+            android:theme="@style/ucrop_EditTextHint">
+
+            <EditText
+                android:id="@+id/ucrop_editText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:textColor="@color/ucrop_textColorWhite" />
         </android.support.design.widget.TextInputLayout>
 
-    </FrameLayout>
+    </RelativeLayout>
 
 </RelativeLayout>
