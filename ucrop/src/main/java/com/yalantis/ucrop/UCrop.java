@@ -188,6 +188,16 @@ public class UCrop {
     }
 
     /**
+     * Retrieve EXTRA_OUTPUT_IMAGE_DESCRIPTIONS from the result Intent
+     *
+     * @param intent crop result intent
+     */
+    @Nullable
+    public static String getOutputDescriptions(@NonNull Intent intent) {
+        return intent.getStringExtra(EXTRA_OUTPUT_IMAGE_DESCRIPTIONS);
+    }
+
+    /**
      * Retrieve cropped image aspect ratio from the result Intent
      *
      * @param intent crop result intent
