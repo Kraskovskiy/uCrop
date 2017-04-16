@@ -314,7 +314,7 @@ public class SampleActivity extends BaseActivity {
             new AspectRatio("ASPECT", 1, 1));
 
        */
-
+        options.setShowDescriptions(true);
         return uCrop.withOptions(options);
     }
 
