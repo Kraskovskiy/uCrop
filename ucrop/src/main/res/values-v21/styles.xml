@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ucrop_EditTextHint" parent="TextAppearance.AppCompat">
+    <style name="ucrop_EditTextHint" parent="ucrop_AppTheme">
         <item name="colorAccent">@color/ucrop_textColorWhite</item>
         <item name="android:textColorHint">@color/ucrop_textColorWhite</item>
         <item name="colorControlNormal">@color/ucrop_textColorWhite</item>
