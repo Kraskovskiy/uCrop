@@ -288,6 +288,12 @@ public class UCropActivity extends AppCompatActivity {
         mShowBottomControls = !intent.getBooleanExtra(UCrop.Options.EXTRA_HIDE_BOTTOM_CONTROLS, false);
         mEditTextCaption = (EditText) findViewById(R.id.ucrop_editText);
         mEditTextCaption.setVisibility(intent.getBooleanExtra(UCrop.Options.EXTRA_SHOW_DESCRIPTIONS, false) ? View.VISIBLE : View.GONE);
+        mEditTextCaption.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean focused) {
+                mUCropView.setFixedHeight(focused);
+            }
+        });
 
         setupAppBar();
         initiateRootViews();

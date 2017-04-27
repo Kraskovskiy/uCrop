@@ -16,6 +16,7 @@ public class UCropView extends FrameLayout {
 
     private final GestureCropImageView mGestureCropImageView;
     private final OverlayView mViewOverlay;
+    private boolean fixedHeight;
 
     public UCropView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -46,6 +47,11 @@ public class UCropView extends FrameLayout {
                 mGestureCropImageView.setCropRect(cropRect);
             }
         });
+
+    }
+
+    public void setFixedHeight(boolean fixedHeight) {
+        this.fixedHeight = fixedHeight;
     }
 
     @Override
@@ -61,6 +67,15 @@ public class UCropView extends FrameLayout {
     @NonNull
     public OverlayView getOverlayView() {
         return mViewOverlay;
+    }
+
+    @Override
+    public void onMeasure(int width, int height) {
+        if (fixedHeight) {
+            setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight());
+            return;
+        }
+        super.onMeasure(width, height);
     }
 
 }
