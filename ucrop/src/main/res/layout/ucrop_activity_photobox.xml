@@ -68,8 +68,9 @@
             android:layout_gravity="bottom"
             android:hint="@string/ucrop_add_a_caption"
             android:theme="@style/ucrop_EditTextHint"
-            android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp">
+            android:layout_toLeftOf="@+id/ucrop_imageView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true">
 
             <EditText
                 android:id="@+id/ucrop_editText"
@@ -81,6 +82,23 @@
                 android:maxLines="1"
                 android:textColor="@color/ucrop_textColorWhite" />
         </android.support.design.widget.TextInputLayout>
+
+        <ImageView
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ucrop_send"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/ucrop_imageView"
+            android:layout_below="@+id/ucrop"
+            android:scaleType="fitCenter"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:maxWidth="40dp"
+            android:maxHeight="40dp"
+            android:layout_width="30dp"
+            android:visibility="gone" />
 
     </RelativeLayout>
 

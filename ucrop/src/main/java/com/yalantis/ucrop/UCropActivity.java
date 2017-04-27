@@ -101,6 +101,7 @@ public class UCropActivity extends AppCompatActivity {
     private TextView mTextViewRotateAngle, mTextViewScalePercent;
     private View mBlockingView;
     private EditText mEditTextCaption;
+    private ImageView mImageSend;
 
     private Bitmap.CompressFormat mCompressFormat = DEFAULT_COMPRESS_FORMAT;
     private int mCompressQuality = DEFAULT_COMPRESS_QUALITY;
@@ -286,8 +287,26 @@ public class UCropActivity extends AppCompatActivity {
         mToolbarTitle = !TextUtils.isEmpty(mToolbarTitle) ? mToolbarTitle : getResources().getString(R.string.ucrop_label_edit_photo);
         mLogoColor = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_LOGO_COLOR, ContextCompat.getColor(this, R.color.ucrop_color_default_logo));
         mShowBottomControls = !intent.getBooleanExtra(UCrop.Options.EXTRA_HIDE_BOTTOM_CONTROLS, false);
+        mImageSend = (ImageView) findViewById(R.id.ucrop_imageView);
+        mImageSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cropAndSaveImage();
+            }
+        });
         mEditTextCaption = (EditText) findViewById(R.id.ucrop_editText);
         mEditTextCaption.setVisibility(intent.getBooleanExtra(UCrop.Options.EXTRA_SHOW_DESCRIPTIONS, false) ? View.VISIBLE : View.GONE);
+        mEditTextCaption.setCursorVisible(true);
+        mEditTextCaption.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    mImageSend.setVisibility(View.VISIBLE);
+                } else {
+                    mImageSend.setVisibility(View.GONE);
+                }
+            }
+        });
 
         setupAppBar();
         initiateRootViews();
@@ -312,6 +331,11 @@ public class UCropActivity extends AppCompatActivity {
             setupScaleWidget();
             setupStatesWrapper();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     /**
