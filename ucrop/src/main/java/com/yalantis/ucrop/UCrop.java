@@ -262,6 +262,7 @@ public class UCrop {
         public static final String EXTRA_ASPECT_RATIO_SELECTED_BY_DEFAULT = EXTRA_PREFIX + ".AspectRatioSelectedByDefault";
         public static final String EXTRA_ASPECT_RATIO_OPTIONS = EXTRA_PREFIX + ".AspectRatioOptions";
         public static final String EXTRA_SHOW_DESCRIPTIONS = EXTRA_PREFIX + ".descriptionsOptions";
+        public static final String EXTRA_FLAG_SECURE = EXTRA_PREFIX + ".secureOptions";
 
 
         private final Bundle mOptionBundle;
@@ -368,10 +369,17 @@ public class UCrop {
         }
 
         /**
-         * @param show - set to true if you want to see a crop grid/guidelines on top of an image
+         * @param show
          */
         public void setShowDescriptions(boolean show) {
             mOptionBundle.putBoolean(EXTRA_SHOW_DESCRIPTIONS, show);
+        }
+
+        /**
+         * @param secure
+         */
+        public void setFlagSecure(boolean secure) {
+            mOptionBundle.putBoolean(EXTRA_FLAG_SECURE, secure);
         }
 
         /**

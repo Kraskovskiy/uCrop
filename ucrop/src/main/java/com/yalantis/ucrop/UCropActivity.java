@@ -109,11 +109,13 @@ public class UCropActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
-
-        setContentView(R.layout.ucrop_activity_photobox);
 
         final Intent intent = getIntent();
+        if (intent.getBooleanExtra(UCrop.Options.EXTRA_FLAG_SECURE, false)) {
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE);
+        }
+
+        setContentView(R.layout.ucrop_activity_photobox);
 
         setupViews(intent);
         setImageData(intent);
@@ -285,7 +287,7 @@ public class UCropActivity extends AppCompatActivity {
         mLogoColor = intent.getIntExtra(UCrop.Options.EXTRA_UCROP_LOGO_COLOR, ContextCompat.getColor(this, R.color.ucrop_color_default_logo));
         mShowBottomControls = !intent.getBooleanExtra(UCrop.Options.EXTRA_HIDE_BOTTOM_CONTROLS, false);
         mEditTextCaption = (EditText) findViewById(R.id.ucrop_editText);
-        mEditTextCaption.setVisibility(intent.getBooleanExtra(UCrop.Options.EXTRA_SHOW_DESCRIPTIONS, false)?View.VISIBLE:View.GONE);
+        mEditTextCaption.setVisibility(intent.getBooleanExtra(UCrop.Options.EXTRA_SHOW_DESCRIPTIONS, false) ? View.VISIBLE : View.GONE);
 
         setupAppBar();
         initiateRootViews();

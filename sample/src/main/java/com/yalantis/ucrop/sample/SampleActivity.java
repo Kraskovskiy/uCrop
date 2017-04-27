@@ -315,6 +315,7 @@ public class SampleActivity extends BaseActivity {
 
        */
         options.setShowDescriptions(true);
+        options.setFlagSecure(false);
         return uCrop.withOptions(options);
     }
 
