@@ -155,6 +155,10 @@ public class BitmapCropTask extends AsyncTask<Void, Void, Throwable> {
             return true;
         } else {
             FileUtils.copyFile(mImageInputPath, mImageOutputPath);
+            ExifInterface originalExif = new ExifInterface(mImageInputPath);
+            if (mCompressFormat.equals(Bitmap.CompressFormat.JPEG)) {
+                ImageHeaderParser.copyExif(originalExif, mViewBitmap.getWidth(), mViewBitmap.getHeight(), mImageOutputPath);
+            }
             return false;
         }
     }
