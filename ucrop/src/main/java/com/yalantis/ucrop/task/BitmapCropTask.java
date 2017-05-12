@@ -146,12 +146,21 @@ public class BitmapCropTask extends AsyncTask<Void, Void, Throwable> {
         boolean shouldCrop = shouldCrop(mCroppedImageWidth, mCroppedImageHeight);
         Log.i(TAG, "Should crop: " + shouldCrop);
 
-        ExifInterface originalExif = new ExifInterface(mImageInputPath);
-        saveImage(Bitmap.createBitmap(mViewBitmap, left, top, mCroppedImageWidth, mCroppedImageHeight));
-        if (mCompressFormat.equals(Bitmap.CompressFormat.JPEG)) {
-            ImageHeaderParser.copyExif(originalExif, mCroppedImageWidth, mCroppedImageHeight, mImageOutputPath);
+        if (shouldCrop) {
+            ExifInterface originalExif = new ExifInterface(mImageInputPath);
+            saveImage(Bitmap.createBitmap(mViewBitmap, left, top, mCroppedImageWidth, mCroppedImageHeight));
+            if (mCompressFormat.equals(Bitmap.CompressFormat.JPEG)) {
+                ImageHeaderParser.copyExif(originalExif, mCroppedImageWidth, mCroppedImageHeight, mImageOutputPath);
+            }
+            return true;
+        } else {
+            FileUtils.copyFile(mImageInputPath, mImageOutputPath);
+            ExifInterface originalExif = new ExifInterface(mImageInputPath);
+            if (mCompressFormat.equals(Bitmap.CompressFormat.JPEG)) {
+                ImageHeaderParser.copyExif(originalExif, mViewBitmap.getWidth(), mViewBitmap.getHeight(), mImageOutputPath);
+            }
+            return true;
         }
-        return true;
     }
 
     private void saveImage(@NonNull Bitmap croppedBitmap) throws FileNotFoundException {
