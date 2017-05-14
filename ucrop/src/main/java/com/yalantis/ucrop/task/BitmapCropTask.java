@@ -147,14 +147,14 @@ public class BitmapCropTask extends AsyncTask<Void, Void, Throwable> {
         Log.i(TAG, "Should crop: " + shouldCrop);
 
         if (shouldCrop) {
-            ExifInterface originalExif = new ExifInterface(mImageInputPath);
             saveImage(Bitmap.createBitmap(mViewBitmap, left, top, mCroppedImageWidth, mCroppedImageHeight));
+            ExifInterface originalExif = new ExifInterface(mImageInputPath);
             if (mCompressFormat.equals(Bitmap.CompressFormat.JPEG)) {
                 ImageHeaderParser.copyExif(originalExif, mCroppedImageWidth, mCroppedImageHeight, mImageOutputPath);
             }
             return true;
         } else {
-            FileUtils.copyFile(mImageInputPath, mImageOutputPath);
+            saveImage(Bitmap.createBitmap(mViewBitmap, left, top, mViewBitmap.getWidth(), mViewBitmap.getHeight()));
             ExifInterface originalExif = new ExifInterface(mImageInputPath);
             if (mCompressFormat.equals(Bitmap.CompressFormat.JPEG)) {
                 ImageHeaderParser.copyExif(originalExif, mViewBitmap.getWidth(), mViewBitmap.getHeight(), mImageOutputPath);
