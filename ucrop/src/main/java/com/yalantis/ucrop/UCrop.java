@@ -36,6 +36,7 @@ public class UCrop {
 
     public static final String EXTRA_INPUT_URI = EXTRA_PREFIX + ".InputUri";
     public static final String EXTRA_OUTPUT_URI = EXTRA_PREFIX + ".OutputUri";
+    public static final String EXTRA_OUTPUT_DELAYED_TIME = EXTRA_PREFIX + ".DelayedTime";
     public static final String EXTRA_OUTPUT_CROP_ASPECT_RATIO = EXTRA_PREFIX + ".CropAspectRatio";
     public static final String EXTRA_OUTPUT_IMAGE_WIDTH = EXTRA_PREFIX + ".ImageWidth";
     public static final String EXTRA_OUTPUT_IMAGE_HEIGHT = EXTRA_PREFIX + ".ImageHeight";
@@ -198,6 +199,16 @@ public class UCrop {
     }
 
     /**
+     * Retrieve EXTRA_OUTPUT_DELAYED_TIME from the result Intent
+     *
+     * @param intent crop result intent
+     */
+    @Nullable
+    public static long getOutputDelayedTime(@NonNull Intent intent) {
+        return intent.getLongExtra(EXTRA_OUTPUT_DELAYED_TIME, 0L);
+    }
+
+    /**
      * Retrieve cropped image aspect ratio from the result Intent
      *
      * @param intent crop result intent
@@ -263,6 +274,7 @@ public class UCrop {
         public static final String EXTRA_ASPECT_RATIO_OPTIONS = EXTRA_PREFIX + ".AspectRatioOptions";
         public static final String EXTRA_SHOW_DESCRIPTIONS = EXTRA_PREFIX + ".descriptionsOptions";
         public static final String EXTRA_FLAG_SECURE = EXTRA_PREFIX + ".secureOptions";
+        public static final String EXTRA_DELAYED_OPTIONS = EXTRA_PREFIX + ".delayedOptions";
 
 
         private final Bundle mOptionBundle;
@@ -381,6 +393,14 @@ public class UCrop {
         public void setFlagSecure(boolean secure) {
             mOptionBundle.putBoolean(EXTRA_FLAG_SECURE, secure);
         }
+
+        /**
+         * @param showDelayedOption
+         */
+        public void setShowDelayedOption(boolean showDelayedOption) {
+            mOptionBundle.putBoolean(EXTRA_DELAYED_OPTIONS, showDelayedOption);
+        }
+
 
         /**
          * @param count - crop grid rows count.

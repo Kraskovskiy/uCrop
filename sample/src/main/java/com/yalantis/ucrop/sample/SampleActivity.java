@@ -316,11 +316,14 @@ public class SampleActivity extends BaseActivity {
        */
         options.setShowDescriptions(true);
         options.setFlagSecure(false);
+        options.setShowDelayedOption(true);
         return uCrop.withOptions(options);
     }
 
     private void handleCropResult(@NonNull Intent result) {
         final Uri resultUri = UCrop.getOutput(result);
+        long time = UCrop.getOutputDelayedTime(result);
+        Toast.makeText(this, "Output delay: " + time, Toast.LENGTH_LONG).show();
         if (resultUri != null) {
             ResultActivity.startWithUri(SampleActivity.this, resultUri);
         } else {

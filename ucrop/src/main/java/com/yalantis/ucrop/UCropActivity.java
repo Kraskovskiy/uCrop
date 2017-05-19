@@ -1,6 +1,7 @@
 package com.yalantis.ucrop;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -16,10 +17,13 @@ import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,11 +33,17 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.shawnlin.numberpicker.NumberPicker;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.yalantis.ucrop.callback.BitmapCropCallback;
 import com.yalantis.ucrop.model.AspectRatio;
 import com.yalantis.ucrop.util.SelectedStateListDrawable;
@@ -48,9 +58,11 @@ import com.yalantis.ucrop.view.widget.HorizontalProgressWheelView;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import me.kareluo.ui.PopupMenuView;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -58,7 +70,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  */
 
 @SuppressWarnings("ConstantConditions")
-public class UCropActivity extends AppCompatActivity {
+public class UCropActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
 
     public static final int DEFAULT_COMPRESS_QUALITY = 90;
     public static final Bitmap.CompressFormat DEFAULT_COMPRESS_FORMAT = Bitmap.CompressFormat.JPEG;
@@ -67,6 +79,17 @@ public class UCropActivity extends AppCompatActivity {
     public static final int SCALE = 1;
     public static final int ROTATE = 2;
     public static final int ALL = 3;
+
+    private final String TAG_DATE_PICKER_DIALOG = "TAG_DATE_PICKER_DIALOG";
+    private final String TAG_TIME_PICKER_DIALOG = "TAG_TIME_PICKER_DIALOG";
+
+    private final int HOUR_MILLIS = 3600000;
+    private long selectedDelayedMillis;
+
+    //date picker
+    private int year;
+    private int month;
+    private int day;
 
     @IntDef({NONE, SCALE, ROTATE, ALL})
     @Retention(RetentionPolicy.SOURCE)
@@ -155,6 +178,22 @@ public class UCropActivity extends AppCompatActivity {
             menuItemCrop.setIcon(menuItemCropIcon);
         }
 
+        MenuItem menuItemDelayed = menu.findItem(R.id.menu_delayed);
+        if (getIntent().getBooleanExtra(UCrop.Options.EXTRA_DELAYED_OPTIONS, false)) {
+            menuItemDelayed.setVisible(true);
+            ImageButton view = (ImageButton) menuItemDelayed.getActionView();
+            view.setImageResource(R.drawable.ucrop_ic_timer_white);
+            view.setBackground(null);
+            view.setAlpha(selectedDelayedMillis == 0 ? 0.5f : 1f);
+            Drawable menuItemDelayedIcon = view.getDrawable();
+            if (menuItemDelayedIcon != null) {
+                menuItemDelayedIcon.mutate();
+                menuItemDelayedIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP);
+                menuItemDelayed.setIcon(menuItemDelayedIcon);
+            }
+            view.setOnClickListener(this::showDelayMessageDialog);
+        }
+
         return true;
     }
 
@@ -168,7 +207,11 @@ public class UCropActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_crop) {
-            cropAndSaveImage();
+            if (selectedDelayedMillis == 0 || selectedDelayedMillis > 60000) {
+                cropAndSaveImage();
+            } else {
+                Toast.makeText(this, R.string.ucrop_invalid_date, Toast.LENGTH_LONG).show();
+            }
         } else if (item.getItemId() == android.R.id.home) {
             onBackPressed();
         }
@@ -641,6 +684,7 @@ public class UCropActivity extends AppCompatActivity {
 
     protected void setResultUri(Uri uri, float resultAspectRatio, int imageWidth, int imageHeight) {
         setResult(RESULT_OK, new Intent()
+                .putExtra(UCrop.EXTRA_OUTPUT_DELAYED_TIME, selectedDelayedMillis)
                 .putExtra(UCrop.EXTRA_OUTPUT_URI, uri)
                 .putExtra(UCrop.EXTRA_OUTPUT_CROP_ASPECT_RATIO, resultAspectRatio)
                 .putExtra(UCrop.EXTRA_OUTPUT_IMAGE_WIDTH, imageWidth)
@@ -651,6 +695,98 @@ public class UCropActivity extends AppCompatActivity {
 
     protected void setResultError(Throwable throwable) {
         setResult(UCrop.RESULT_ERROR, new Intent().putExtra(UCrop.EXTRA_ERROR, throwable));
+    }
+
+    private void showDelayMessageDialog(View anchor) {
+        PopupMenuView menuView = new PopupMenuView(this, selectedDelayedMillis == 0 ? R.menu.delay_message_dialog : R.menu.delay_message_dialog_2, new MenuBuilder(this));
+        menuView.setInputMethodMode(PopupWindow.INPUT_METHOD_NOT_NEEDED);
+        menuView.setOrientation(LinearLayout.VERTICAL);
+        menuView.setOnMenuClickListener((position, menu) -> {
+            if (menu.getId() == R.id.ucrop_action_hour) {
+                selectedDelayedMillis = HOUR_MILLIS / 60;
+                invalidateOptionsMenu();
+                return true;
+            } else if (menu.getId() == R.id.ucrop_action_several_hours) {
+                showSelectHoursDialog(UCropActivity.this, hours -> {
+                    selectedDelayedMillis = hours * HOUR_MILLIS;
+                    invalidateOptionsMenu();
+                });
+                return true;
+            } else if (menu.getId() == R.id.ucrop_action_set_date) {
+                showDatePicker();
+                return true;
+            } else if (menu.getId() == R.id.ucrop_action_reset) {
+                selectedDelayedMillis = 0;
+                invalidateOptionsMenu();
+                return true;
+            } else {
+                return false;
+            }
+        });
+        menuView.show(anchor);
+    }
+
+    private void showSelectHoursDialog(Activity activity, SelectListener listener) {
+        final AlertDialog.Builder d = new AlertDialog.Builder(activity);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.select_hours_dialog, null);
+        d.setTitle(R.string.ucrop_select_number_of_hours);
+        d.setView(dialogView);
+        final NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.dialog_number_picker);
+        numberPicker.setMaxValue(23);
+        numberPicker.setMinValue(1);
+        numberPicker.setValue(4);
+        numberPicker.setWrapSelectorWheel(false);
+        d.setPositiveButton(R.string.ucrop_action_ok, (dialogInterface, i) -> listener.onSelect(numberPicker.getValue()));
+        d.setNegativeButton(R.string.ucrop_cancel, (dialogInterface, i) -> dialogInterface.dismiss());
+        AlertDialog alertDialog = d.create();
+        alertDialog.show();
+    }
+
+    private void showDatePicker() {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.setMinDate(now);
+        dpd.dismissOnPause(true);
+        dpd.show(getFragmentManager(), TAG_DATE_PICKER_DIALOG);
+    }
+
+    private void showTimePicker() {
+        Calendar now = Calendar.getInstance();
+        TimePickerDialog dpd = TimePickerDialog.newInstance(
+                this,
+                now.get(Calendar.HOUR_OF_DAY),
+                now.get(Calendar.MINUTE),
+                true
+        );
+        dpd.dismissOnPause(true);
+        dpd.show(getFragmentManager(), TAG_TIME_PICKER_DIALOG);
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        this.year = year;
+        this.month = monthOfYear;
+        this.day = dayOfMonth;
+        showTimePicker();
+    }
+
+    @Override
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day, hourOfDay, minute, second);
+        long time = calendar.getTimeInMillis();
+        selectedDelayedMillis = time - System.currentTimeMillis();
+        invalidateOptionsMenu();
+    }
+
+    private interface SelectListener {
+        void onSelect(Integer value);
     }
 
 }

@@ -6,4 +6,16 @@
     <string name="ucrop_menu_crop">Crop</string>
     <string name="ucrop_mutate_exception_hint">Therefore, override color resource (ucrop_color_toolbar_widget) in your app to make it work on pre-L devices</string>
     <string name="ucrop_add_a_caption">добавить описание…</string>
+    <string name="ucrop_menu_delayed">Отложенные сообщения</string>
+
+    <string name="ucrop_action_hour">через час</string>
+    <string name="ucrop_action_several_hours">через N часов</string>
+    <string name="ucrop_action_set_date">задать время доставки</string>
+    <string name="ucrop_action_reset">сбросить</string>
+
+    <string name="ucrop_select_number_of_hours">Выберите количество часов</string>
+    <string name="ucrop_invalid_date">Неправильная дата</string>
+
+    <string name="ucrop_action_ok">OK</string>
+    <string name="ucrop_cancel">Отмена</string>
 </resources>
