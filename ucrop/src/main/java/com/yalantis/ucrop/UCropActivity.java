@@ -200,6 +200,7 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.findItem(R.id.menu_crop).setVisible(!mShowLoader);
         menu.findItem(R.id.menu_loader).setVisible(mShowLoader);
+        menu.findItem(R.id.menu_delayed).setVisible(!mShowLoader);
         return super.onPrepareOptionsMenu(menu);
     }
 
