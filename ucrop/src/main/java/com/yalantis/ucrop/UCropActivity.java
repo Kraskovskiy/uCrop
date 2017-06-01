@@ -207,11 +207,8 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_crop) {
-            if (selectedDelayedMillis == 0 || selectedDelayedMillis > 60000) {
-                cropAndSaveImage();
-            } else {
-                Toast.makeText(this, R.string.ucrop_invalid_date, Toast.LENGTH_LONG).show();
-            }
+            selectedDelayedMillis = 0;
+            cropAndSaveImage();
         } else if (item.getItemId() == android.R.id.home) {
             onBackPressed();
         }
@@ -698,26 +695,22 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
     }
 
     private void showDelayMessageDialog(View anchor) {
-        PopupMenuView menuView = new PopupMenuView(this, selectedDelayedMillis == 0 ? R.menu.delay_message_dialog : R.menu.delay_message_dialog_2, new MenuBuilder(this));
+        PopupMenuView menuView = new PopupMenuView(this, R.menu.ucrop_delay_message_dialog, new MenuBuilder(this));
         menuView.setInputMethodMode(PopupWindow.INPUT_METHOD_NOT_NEEDED);
         menuView.setOrientation(LinearLayout.VERTICAL);
         menuView.setOnMenuClickListener((position, menu) -> {
             if (menu.getId() == R.id.ucrop_action_hour) {
                 selectedDelayedMillis = HOUR_MILLIS / 60;
-                invalidateOptionsMenu();
+                cropAndSaveImage();
                 return true;
             } else if (menu.getId() == R.id.ucrop_action_several_hours) {
                 showSelectHoursDialog(UCropActivity.this, hours -> {
                     selectedDelayedMillis = hours * HOUR_MILLIS;
-                    invalidateOptionsMenu();
+                    cropAndSaveImage();
                 });
                 return true;
             } else if (menu.getId() == R.id.ucrop_action_set_date) {
                 showDatePicker();
-                return true;
-            } else if (menu.getId() == R.id.ucrop_action_reset) {
-                selectedDelayedMillis = 0;
-                invalidateOptionsMenu();
                 return true;
             } else {
                 return false;
@@ -782,7 +775,7 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
         calendar.set(year, month, day, hourOfDay, minute, second);
         long time = calendar.getTimeInMillis();
         selectedDelayedMillis = time - System.currentTimeMillis();
-        invalidateOptionsMenu();
+        cropAndSaveImage();
     }
 
     private interface SelectListener {
