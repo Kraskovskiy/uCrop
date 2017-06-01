@@ -184,7 +184,6 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
             ImageButton view = (ImageButton) menuItemDelayed.getActionView();
             view.setImageResource(R.drawable.ucrop_ic_timer_white);
             view.setBackground(null);
-            view.setAlpha(selectedDelayedMillis == 0 ? 0.5f : 1f);
             Drawable menuItemDelayedIcon = view.getDrawable();
             if (menuItemDelayedIcon != null) {
                 menuItemDelayedIcon.mutate();
