@@ -191,6 +191,8 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
                 menuItemDelayed.setIcon(menuItemDelayedIcon);
             }
             view.setOnClickListener(this::showDelayMessageDialog);
+        } else {
+            menuItemDelayed.setVisible(false);
         }
 
         return true;
