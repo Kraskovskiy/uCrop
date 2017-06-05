@@ -746,6 +746,7 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
                 now.get(Calendar.MONTH),
                 now.get(Calendar.DAY_OF_MONTH)
         );
+        dpd.setAccentColor(getResources().getColor(R.color.ucrop_color_toolbar));
         dpd.setMinDate(now);
         dpd.dismissOnPause(true);
         dpd.show(getFragmentManager(), TAG_DATE_PICKER_DIALOG);
