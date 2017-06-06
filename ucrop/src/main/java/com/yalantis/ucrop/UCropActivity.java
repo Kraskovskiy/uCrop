@@ -760,6 +760,7 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
                 now.get(Calendar.MINUTE),
                 true
         );
+        dpd.setAccentColor(getResources().getColor(R.color.ucrop_color_toolbar));
         dpd.dismissOnPause(true);
         dpd.show(getFragmentManager(), TAG_TIME_PICKER_DIALOG);
     }
