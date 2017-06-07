@@ -701,7 +701,7 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
         menuView.setOrientation(LinearLayout.VERTICAL);
         menuView.setOnMenuClickListener((position, menu) -> {
             if (menu.getId() == R.id.ucrop_action_hour) {
-                selectedDelayedMillis = HOUR_MILLIS / 60;
+                selectedDelayedMillis = HOUR_MILLIS;
                 cropAndSaveImage();
                 return true;
             } else if (menu.getId() == R.id.ucrop_action_several_hours) {
