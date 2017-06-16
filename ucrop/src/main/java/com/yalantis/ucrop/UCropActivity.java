@@ -39,6 +39,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.shawnlin.numberpicker.NumberPicker;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -681,6 +682,7 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
     }
 
     protected void setResultUri(Uri uri, float resultAspectRatio, int imageWidth, int imageHeight) {
+        Toast.makeText(this, "setResultUri", Toast.LENGTH_LONG).show();
         setResult(RESULT_OK, new Intent()
                 .putExtra(UCrop.EXTRA_OUTPUT_DELAYED_TIME, selectedDelayedMillis)
                 .putExtra(UCrop.EXTRA_OUTPUT_URI, uri)
@@ -692,6 +694,7 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
     }
 
     protected void setResultError(Throwable throwable) {
+        Toast.makeText(this, "setResultError " + throwable.getMessage(), Toast.LENGTH_LONG).show();
         setResult(UCrop.RESULT_ERROR, new Intent().putExtra(UCrop.EXTRA_ERROR, throwable));
     }
 
