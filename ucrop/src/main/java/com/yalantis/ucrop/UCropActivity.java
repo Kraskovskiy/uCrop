@@ -665,6 +665,7 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
         mShowLoader = true;
         supportInvalidateOptionsMenu();
 
+        Toast.makeText(this, "cropAndSaveImage", Toast.LENGTH_LONG).show();
         mGestureCropImageView.cropAndSaveImage(mCompressFormat, mCompressQuality, new BitmapCropCallback() {
 
             @Override
