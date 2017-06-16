@@ -159,10 +159,10 @@ public class BitmapCropTask extends AsyncTask<Void, Void, Throwable> {
                     ExifInterface.TAG_ORIENTATION,
                     ExifInterface.ORIENTATION_NORMAL);
             if (orientation != 0) {
+                saveImage(Bitmap.createBitmap(mViewBitmap, left, top, mCroppedImageWidth, mCroppedImageHeight));
                 if (mCompressFormat.equals(Bitmap.CompressFormat.JPEG)) {
                     ImageHeaderParser.copyExif(originalExif, mViewBitmap.getWidth(), mViewBitmap.getHeight(), mImageOutputPath);
                 }
-                saveImage(Bitmap.createBitmap(mViewBitmap, left, top, mCroppedImageWidth, mCroppedImageHeight));
             } else {
                 FileUtils.copyFile(mImageInputPath, mImageOutputPath);
             }
