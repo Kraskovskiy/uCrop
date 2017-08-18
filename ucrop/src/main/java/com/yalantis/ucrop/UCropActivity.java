@@ -760,17 +760,17 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
             Action1<Integer> npSelectAction) {
         final AlertDialog.Builder builderDialog = new AlertDialog.Builder(context);
         LayoutInflater inflater = LayoutInflater.from(context);
-        View dialogView = inflater.inflate(R.layout.select_hours_dialog, null);
+        View dialogView = inflater.inflate(R.layout.ucrop_select_hours_dialog, null);
         builderDialog.setView(dialogView);
 
-        NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.dialog_number_picker);
+        NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.ucrop_dialog_number_picker);
         numberPicker.setVisibility(npInitAction != null ? View.VISIBLE : View.GONE);
         if (npInitAction != null) npInitAction.call(numberPicker);
 
-        TextView messageDialog = (TextView) dialogView.findViewById(R.id.messageDialog);
-        TextView titleDialog = (TextView) dialogView.findViewById(R.id.titleDialog);
-        Button btnNo = (Button) dialogView.findViewById(R.id.btnNo);
-        Button btnYes = (Button) dialogView.findViewById(R.id.btnYes);
+        TextView messageDialog = (TextView) dialogView.findViewById(R.id.ucrop_messageDialog);
+        TextView titleDialog = (TextView) dialogView.findViewById(R.id.ucrop_titleDialog);
+        Button btnNo = (Button) dialogView.findViewById(R.id.ucrop_btnNo);
+        Button btnYes = (Button) dialogView.findViewById(R.id.ucrop_btnYes);
         if (!TextUtils.isEmpty(yes)) {
             btnYes.setText(yes);
         } else {

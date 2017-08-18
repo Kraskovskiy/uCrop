@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/titleDialog"
+            android:id="@+id/ucrop_titleDialog"
             fontPath="fonts/Roboto.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
             tools:ignore="MissingPrefix" />
 
         <TextView
-            android:id="@+id/messageDialog"
+            android:id="@+id/ucrop_messageDialog"
             fontPath="fonts/Roboto.ttf"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
             tools:ignore="MissingPrefix" />
 
         <com.shawnlin.numberpicker.NumberPicker
-            android:id="@+id/dialog_number_picker"
+            android:id="@+id/ucrop_dialog_number_picker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -66,7 +66,7 @@
             android:layout_marginTop="@dimen/ucrop_padding_crop_frame">
 
             <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btnNo"
+                android:id="@+id/ucrop_btnNo"
                 fontPath="fonts/Roboto.ttf"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
@@ -82,7 +82,7 @@
                 tools:visibility="visible" />
 
             <android.support.v7.widget.AppCompatButton
-                android:id="@+id/btnYes"
+                android:id="@+id/ucrop_btnYes"
                 fontPath="fonts/Roboto.ttf"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
