@@ -5,6 +5,14 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="ucrop_EditTextTheme" parent="ucrop_AppTheme">
+        <item name="android:textColor">@color/ucrop_textColorSecondary</item>
+        <item name="android:textColorHint">@color/ucrop_background_color</item>
+        <item name="colorAccent">@color/ucrop_textColorSecondary</item>
+        <item name="colorControlNormal">@color/ucrop_textColorSecondary</item>
+        <item name="colorControlActivated">@color/ucrop_textColorSecondary</item>
+    </style>
+
     <style name="ucrop_ImageViewWidgetIcon">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

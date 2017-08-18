@@ -1,21 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_gravity="center"
-    android:gravity="center_horizontal">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="none">
 
-    <com.shawnlin.numberpicker.NumberPicker
-        android:id="@+id/dialog_number_picker"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:np_width="64dp"
-        app:np_height="180dp"
-        app:np_dividerColor="@color/ucrop_color_toolbar"
-        app:np_max="23"
-        app:np_min="1"
-        app:np_selectedTextColor="@color/ucrop_color_widget"
-        app:np_textColor="@color/ucrop_color_widget"
-        app:np_textSize="@dimen/ucrop_textSize36"
-        app:np_value="1" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/titleDialog"
+            fontPath="fonts/Roboto.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingLeft="@dimen/ucrop_padding_crop_frame"
+            android:paddingRight="@dimen/ucrop_padding_crop_frame"
+            android:paddingTop="@dimen/ucrop_padding_crop_frame"
+            android:text="Title"
+            android:textColor="@color/ucrop_textColorSecondary"
+            android:textSize="@dimen/ucrop_textSize40"
+            tools:ignore="MissingPrefix" />
+
+        <TextView
+            android:id="@+id/messageDialog"
+            fontPath="fonts/Roboto.ttf"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingLeft="@dimen/ucrop_padding_crop_frame"
+            android:paddingRight="@dimen/ucrop_padding_crop_frame"
+            android:paddingTop="@dimen/ucrop_padding_crop_frame"
+            android:text="Message"
+            android:textColor="@color/ucrop_textColorTertiary"
+            android:textSize="@dimen/ucrop_textSize30"
+            tools:ignore="MissingPrefix" />
+
+        <com.shawnlin.numberpicker.NumberPicker
+            android:id="@+id/dialog_number_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/ucrop_padding_crop_frame"
+            android:layout_marginStart="@dimen/ucrop_padding_crop_frame"
+            android:layout_marginTop="@dimen/ucrop_padding_crop_frame"
+            app:np_dividerColor="@color/ucrop_colorOrange"
+            app:np_height="180dp"
+            app:np_max="23"
+            app:np_min="1"
+            app:np_selectedTextColor="@color/ucrop_textColorSecondary"
+            app:np_textColor="@color/ucrop_textColorSecondary"
+            app:np_textSize="@dimen/ucrop_textSize36"
+            app:np_value="1"
+            app:np_width="64dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/ucrop_padding_crop_frame"
+            android:layout_marginEnd="@dimen/ucrop_padding_crop_frame"
+            android:layout_marginStart="@dimen/ucrop_padding_crop_frame"
+            android:layout_marginTop="@dimen/ucrop_padding_crop_frame">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnNo"
+                fontPath="fonts/Roboto.ttf"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:lines="1"
+                android:minWidth="108dip"
+                android:text="@string/ucrop_cancel"
+                android:textColor="@color/ucrop_textColorPrimary"
+                android:textSize="@dimen/ucrop_textSize30"
+                app:backgroundTint="@color/ucrop_colorGrayDark"
+                tools:ignore="MissingPrefix"
+                tools:visibility="visible" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnYes"
+                fontPath="fonts/Roboto.ttf"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:lines="1"
+                android:minWidth="108dip"
+                android:text="@string/ucrop_action_ok"
+                android:textColor="@color/ucrop_textColorPrimary"
+                android:textSize="@dimen/ucrop_textSize30"
+                app:backgroundTint="@color/ucrop_colorOrange"
+                tools:ignore="MissingPrefix"
+                tools:visibility="visible" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

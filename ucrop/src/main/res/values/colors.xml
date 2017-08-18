@@ -12,9 +12,15 @@
     <color name="ucrop_color_progress_wheel_line">#808080</color>
     <color name="ucrop_color_crop_background">#000</color>
 
+    <color name="ucrop_colorOrange">#e49900</color>
+    <color name="ucrop_colorGrayDark">#474747</color>
+    <color name="ucrop_background_color">#88000000</color>
+
     <color name="ucrop_colorPrimary">#8d685a</color>
     <color name="ucrop_textColorPrimary">#ffffff</color>
     <color name="ucrop_textColorWhite">#ffffff</color>
+    <color name="ucrop_textColorSecondary">#000</color>
+    <color name="ucrop_textColorTertiary">#AAAAAA</color>
 
     <!--Crop View-->
     <color name="ucrop_color_default_crop_grid">#80ffffff</color>

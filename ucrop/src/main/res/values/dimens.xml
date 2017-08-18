@@ -14,8 +14,16 @@
     <dimen name="ucrop_size_wrapper_rotate_button">50dp</dimen>
     <dimen name="ucrop_height_crop_aspect_ratio_text">40dp</dimen>
     <dimen name="ucrop_progress_size">30dp</dimen>
+    <dimen name="ucrop_padding_small">5dp</dimen>
 
+    <dimen name="ucrop_textSize60">30sp</dimen>
     <dimen name="ucrop_textSize40">20sp</dimen>
+    <dimen name="ucrop_textSize36">18sp</dimen>
+    <dimen name="ucrop_textSize30">15sp</dimen>
+    <dimen name="ucrop_textSize26">13sp</dimen>
+    <dimen name="ucrop_textSize24">12sp</dimen>
+    <dimen name="ucrop_textSize21">10.5sp</dimen>
+    <dimen name="ucrop_textSize20">10sp</dimen>
 
     <!--Crop View-->
     <dimen name="ucrop_default_crop_grid_stoke_width">1dp</dimen>
@@ -23,7 +31,5 @@
     <dimen name="ucrop_default_crop_rect_corner_touch_threshold">30dp</dimen>
     <dimen name="ucrop_default_crop_rect_min_size">100dp</dimen>
     <dimen name="ucrop_default_crop_rect_corner_touch_area_line_length">10dp</dimen>
-
-    <dimen name="ucrop_textSize36">18sp</dimen>
 
 </resources>

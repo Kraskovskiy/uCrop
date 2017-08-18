@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -40,6 +41,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding.view.RxView;
 import com.shawnlin.numberpicker.NumberPicker;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -62,6 +64,8 @@ import java.util.List;
 import java.util.Locale;
 
 import me.kareluo.ui.PopupMenuView;
+import rx.functions.Action0;
+import rx.functions.Action1;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -721,19 +725,87 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
     }
 
     private void showSelectHoursDialog(Activity activity, SelectListener listener) {
-        final AlertDialog.Builder d = new AlertDialog.Builder(activity);
-        LayoutInflater inflater = activity.getLayoutInflater();
+        showCustomAlertDialog(
+                activity,
+                null,
+                getString(activity, R.string.ucrop_select_number_of_hours),
+                getString(activity, R.string.ucrop_action_ok),
+                getString(activity, R.string.ucrop_cancel),
+                null,
+                null,
+                null,
+                numberPicker -> {
+                    numberPicker.setMaxValue(23);
+                    numberPicker.setMinValue(1);
+                    numberPicker.setValue(4);
+                    numberPicker.setWrapSelectorWheel(false);
+                },
+                listener::onSelect);
+    }
+
+    private static String getString(Context context, int resID) {
+        return resID > 0 ? context.getString(resID) : null;
+    }
+
+    public static void showCustomAlertDialog(
+            Context context,
+            String title,
+            String message,
+            String yes,
+            String no,
+            Action0 yesAction,
+            Action0 noAction,
+            Action0 dismissAction,
+            Action1<NumberPicker> npInitAction,
+            Action1<Integer> npSelectAction) {
+        final AlertDialog.Builder builderDialog = new AlertDialog.Builder(context);
+        LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.select_hours_dialog, null);
-        d.setTitle(R.string.ucrop_select_number_of_hours);
-        d.setView(dialogView);
-        final NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.dialog_number_picker);
-        numberPicker.setMaxValue(23);
-        numberPicker.setMinValue(1);
-        numberPicker.setValue(4);
-        numberPicker.setWrapSelectorWheel(false);
-        d.setPositiveButton(R.string.ucrop_action_ok, (dialogInterface, i) -> listener.onSelect(numberPicker.getValue()));
-        d.setNegativeButton(R.string.ucrop_cancel, (dialogInterface, i) -> dialogInterface.dismiss());
-        AlertDialog alertDialog = d.create();
+        builderDialog.setView(dialogView);
+
+        NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.dialog_number_picker);
+        numberPicker.setVisibility(npInitAction != null ? View.VISIBLE : View.GONE);
+        if (npInitAction != null) npInitAction.call(numberPicker);
+
+        TextView messageDialog = (TextView) dialogView.findViewById(R.id.messageDialog);
+        TextView titleDialog = (TextView) dialogView.findViewById(R.id.titleDialog);
+        Button btnNo = (Button) dialogView.findViewById(R.id.btnNo);
+        Button btnYes = (Button) dialogView.findViewById(R.id.btnYes);
+        if (!TextUtils.isEmpty(yes)) {
+            btnYes.setText(yes);
+        } else {
+            btnYes.setVisibility(View.GONE);
+        }
+        if (!TextUtils.isEmpty(no)) {
+            btnNo.setText(no);
+        } else {
+            btnNo.setVisibility(View.GONE);
+        }
+
+        if (!TextUtils.isEmpty(title)) {
+            titleDialog.setText(title);
+        } else {
+            titleDialog.setVisibility(View.GONE);
+        }
+        if (!TextUtils.isEmpty(message)) {
+            messageDialog.setText(message);
+        } else {
+            messageDialog.setVisibility(View.GONE);
+        }
+
+        builderDialog.setOnDismissListener(dialogInterface -> {
+            if (dismissAction != null) dismissAction.call();
+        });
+        AlertDialog alertDialog = builderDialog.create();
+        RxView.clicks(btnNo).subscribe(aVoid -> {
+            alertDialog.dismiss();
+            if (noAction != null) noAction.call();
+        });
+        RxView.clicks(btnYes).subscribe(aVoid -> {
+            alertDialog.dismiss();
+            if (npSelectAction != null) npSelectAction.call(numberPicker.getValue());
+            if (yesAction != null) yesAction.call();
+        });
         alertDialog.show();
     }
 
