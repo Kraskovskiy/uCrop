@@ -198,6 +198,7 @@ public class BitmapCropTask extends AsyncTask<Void, Void, Throwable> {
         int pixelError = 1;
         pixelError += Math.round(Math.max(width, height) / 1000f);
         return (mMaxResultImageSizeX > 0 && mMaxResultImageSizeY > 0)
+                || (mCurrentAngle == 90 || mCurrentAngle == -90 || mCurrentAngle == 180 || mCurrentAngle == -180)
                 || Math.abs(mCropRect.left - mCurrentImageRect.left) > pixelError
                 || Math.abs(mCropRect.top - mCurrentImageRect.top) > pixelError
                 || Math.abs(mCropRect.bottom - mCurrentImageRect.bottom) > pixelError

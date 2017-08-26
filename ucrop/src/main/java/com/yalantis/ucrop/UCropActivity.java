@@ -597,6 +597,8 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
 
     private void rotateByAngle(int angle) {
         mGestureCropImageView.postRotate(angle);
+        mGestureCropImageView.setTargetAspectRatio(mGestureCropImageView.getInvertTargetAspectRatio());
+        mGestureCropImageView.zoomInImage(mGestureCropImageView.getCurrentScale()*0.8f);
         mGestureCropImageView.setImageToWrapCropBounds();
     }
 
