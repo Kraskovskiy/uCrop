@@ -41,12 +41,13 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.jakewharton.rxbinding.view.RxView;
 import com.shawnlin.numberpicker.NumberPicker;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.yalantis.ucrop.callback.BitmapCropCallback;
 import com.yalantis.ucrop.model.AspectRatio;
+import com.yalantis.ucrop.util.Action0;
+import com.yalantis.ucrop.util.Action1;
 import com.yalantis.ucrop.util.SelectedStateListDrawable;
 import com.yalantis.ucrop.view.CropImageView;
 import com.yalantis.ucrop.view.GestureCropImageView;
@@ -64,8 +65,6 @@ import java.util.List;
 import java.util.Locale;
 
 import me.kareluo.ui.PopupMenuView;
-import rx.functions.Action0;
-import rx.functions.Action1;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -797,14 +796,20 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
             if (dismissAction != null) dismissAction.call();
         });
         AlertDialog alertDialog = builderDialog.create();
-        RxView.clicks(btnNo).subscribe(aVoid -> {
-            alertDialog.dismiss();
-            if (noAction != null) noAction.call();
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                if (noAction != null) noAction.call();
+            }
         });
-        RxView.clicks(btnYes).subscribe(aVoid -> {
-            alertDialog.dismiss();
-            if (npSelectAction != null) npSelectAction.call(numberPicker.getValue());
-            if (yesAction != null) yesAction.call();
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+                if (npSelectAction != null) npSelectAction.call(numberPicker.getValue());
+                if (yesAction != null) yesAction.call();
+            }
         });
         alertDialog.show();
     }
