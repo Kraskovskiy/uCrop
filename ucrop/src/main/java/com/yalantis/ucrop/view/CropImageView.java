@@ -42,6 +42,7 @@ public class CropImageView extends TransformImageView {
     private final Matrix mTempMatrix = new Matrix();
 
     private float mTargetAspectRatio;
+    private float mInvertTargetAspectRatio;
     private float mMaxScaleMultiplier = DEFAULT_MAX_SCALE_MULTIPLIER;
 
     private CropBoundsChangeListener mCropBoundsChangeListener;
@@ -107,6 +108,13 @@ public class CropImageView extends TransformImageView {
     }
 
     /**
+     * @return - invert aspect ratio for crop bounds
+     */
+    public float getInvertTargetAspectRatio() {
+        return mInvertTargetAspectRatio;
+    }
+
+    /**
      * Updates current crop rectangle with given. Also recalculates image properties and position
      * to fit new crop rectangle.
      *
@@ -114,6 +122,7 @@ public class CropImageView extends TransformImageView {
      */
     public void setCropRect(RectF cropRect) {
         mTargetAspectRatio = cropRect.width() / cropRect.height();
+        mInvertTargetAspectRatio = cropRect.height()/cropRect.width();
         mCropRect.set(cropRect.left - getPaddingLeft(), cropRect.top - getPaddingTop(),
                 cropRect.right - getPaddingRight(), cropRect.bottom - getPaddingBottom());
         calculateImageScaleBounds();
@@ -130,14 +139,18 @@ public class CropImageView extends TransformImageView {
     public void setTargetAspectRatio(float targetAspectRatio) {
         final Drawable drawable = getDrawable();
         if (drawable == null) {
+            mInvertTargetAspectRatio = mTargetAspectRatio;
             mTargetAspectRatio = targetAspectRatio;
             return;
         }
 
         if (targetAspectRatio == SOURCE_IMAGE_ASPECT_RATIO) {
-            mTargetAspectRatio = drawable.getIntrinsicWidth() / (float) drawable.getIntrinsicHeight();
+            mTargetAspectRatio = (float) drawable.getIntrinsicWidth() / (float) drawable.getIntrinsicHeight();
+            mInvertTargetAspectRatio = (float) drawable.getIntrinsicHeight() / (float) drawable.getIntrinsicWidth();
         } else {
+            mInvertTargetAspectRatio = mTargetAspectRatio;
             mTargetAspectRatio = targetAspectRatio;
+
         }
 
         if (mCropBoundsChangeListener != null) {
@@ -375,6 +388,7 @@ public class CropImageView extends TransformImageView {
 
         if (mTargetAspectRatio == SOURCE_IMAGE_ASPECT_RATIO) {
             mTargetAspectRatio = drawableWidth / drawableHeight;
+            mInvertTargetAspectRatio = drawableHeight/drawableWidth;
         }
 
         int height = (int) (mThisWidth / mTargetAspectRatio);
@@ -504,8 +518,10 @@ public class CropImageView extends TransformImageView {
 
         if (targetAspectRatioX == SOURCE_IMAGE_ASPECT_RATIO || targetAspectRatioY == SOURCE_IMAGE_ASPECT_RATIO) {
             mTargetAspectRatio = SOURCE_IMAGE_ASPECT_RATIO;
+            mInvertTargetAspectRatio = SOURCE_IMAGE_ASPECT_RATIO;
         } else {
             mTargetAspectRatio = targetAspectRatioX / targetAspectRatioY;
+            mInvertTargetAspectRatio =  targetAspectRatioY/targetAspectRatioX;
         }
     }
 
