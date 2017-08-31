@@ -3,6 +3,7 @@ package com.yalantis.ucrop;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
@@ -64,6 +65,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import me.kareluo.ui.OptionMenu;
+import me.kareluo.ui.OptionMenuView;
 import me.kareluo.ui.PopupMenuView;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -192,7 +195,12 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
                 menuItemDelayedIcon.setColorFilter(mToolbarWidgetColor, PorterDuff.Mode.SRC_ATOP);
                 menuItemDelayed.setIcon(menuItemDelayedIcon);
             }
-            view.setOnClickListener(this::showDelayMessageDialog);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDelayMessageDialog(v);
+                }
+            });
         } else {
             menuItemDelayed.setVisible(false);
         }
@@ -706,28 +714,34 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
         PopupMenuView menuView = new PopupMenuView(this, R.menu.ucrop_delay_message_dialog, new MenuBuilder(this));
         menuView.setInputMethodMode(PopupWindow.INPUT_METHOD_NOT_NEEDED);
         menuView.setOrientation(LinearLayout.VERTICAL);
-        menuView.setOnMenuClickListener((position, menu) -> {
-            if (menu.getId() == R.id.ucrop_action_hour) {
-                selectedDelayedMillis = HOUR_MILLIS;
-                cropAndSaveImage();
-                return true;
-            } else if (menu.getId() == R.id.ucrop_action_several_hours) {
-                showSelectHoursDialog(UCropActivity.this, hours -> {
-                    selectedDelayedMillis = hours * HOUR_MILLIS;
+        menuView.setOnMenuClickListener(new OptionMenuView.OnOptionMenuClickListener() {
+            @Override
+            public boolean onOptionMenuClick(int position, OptionMenu menu) {
+                if (menu.getId() == R.id.ucrop_action_hour) {
+                    selectedDelayedMillis = HOUR_MILLIS;
                     cropAndSaveImage();
-                });
-                return true;
-            } else if (menu.getId() == R.id.ucrop_action_set_date) {
-                showDatePicker();
-                return true;
-            } else {
-                return false;
+                    return true;
+                } else if (menu.getId() == R.id.ucrop_action_several_hours) {
+                    showSelectHoursDialog(UCropActivity.this, new SelectListener() {
+                        @Override
+                        public void onSelect(Integer hours) {
+                            selectedDelayedMillis = hours * HOUR_MILLIS;
+                            cropAndSaveImage();
+                        }
+                    });
+                    return true;
+                } else if (menu.getId() == R.id.ucrop_action_set_date) {
+                    showDatePicker();
+                    return true;
+                } else {
+                    return false;
+                }
             }
         });
         menuView.show(anchor);
     }
 
-    private void showSelectHoursDialog(Activity activity, SelectListener listener) {
+    private void showSelectHoursDialog(Activity activity, final SelectListener listener) {
         showCustomAlertDialog(
                 activity,
                 null,
@@ -737,13 +751,21 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
                 null,
                 null,
                 null,
-                numberPicker -> {
-                    numberPicker.setMaxValue(23);
-                    numberPicker.setMinValue(1);
-                    numberPicker.setValue(4);
-                    numberPicker.setWrapSelectorWheel(false);
+                new Action1<NumberPicker>() {
+                    @Override
+                    public void call(NumberPicker numberPicker) {
+                        numberPicker.setMaxValue(23);
+                        numberPicker.setMinValue(1);
+                        numberPicker.setValue(4);
+                        numberPicker.setWrapSelectorWheel(false);
+                    }
                 },
-                listener::onSelect);
+                new Action1<Integer>() {
+                    @Override
+                    public void call(Integer value) {
+                        listener.onSelect(value);
+                    }
+                });
     }
 
     private static String getString(Context context, int resID) {
@@ -756,17 +778,17 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
             String message,
             String yes,
             String no,
-            Action0 yesAction,
-            Action0 noAction,
-            Action0 dismissAction,
-            Action1<NumberPicker> npInitAction,
-            Action1<Integer> npSelectAction) {
+            final Action0 yesAction,
+            final Action0 noAction,
+            final Action0 dismissAction,
+            final Action1<NumberPicker> npInitAction,
+            final Action1<Integer> npSelectAction) {
         final AlertDialog.Builder builderDialog = new AlertDialog.Builder(context);
         LayoutInflater inflater = LayoutInflater.from(context);
         View dialogView = inflater.inflate(R.layout.ucrop_select_hours_dialog, null);
         builderDialog.setView(dialogView);
 
-        NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.ucrop_dialog_number_picker);
+        final NumberPicker numberPicker = (NumberPicker) dialogView.findViewById(R.id.ucrop_dialog_number_picker);
         numberPicker.setVisibility(npInitAction != null ? View.VISIBLE : View.GONE);
         if (npInitAction != null) npInitAction.call(numberPicker);
 
@@ -796,10 +818,13 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
             messageDialog.setVisibility(View.GONE);
         }
 
-        builderDialog.setOnDismissListener(dialogInterface -> {
-            if (dismissAction != null) dismissAction.call();
+        builderDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialog) {
+                if (dismissAction != null) dismissAction.call();
+            }
         });
-        AlertDialog alertDialog = builderDialog.create();
+        final AlertDialog alertDialog = builderDialog.create();
         btnNo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

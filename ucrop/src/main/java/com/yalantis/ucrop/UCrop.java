@@ -209,16 +209,6 @@ public class UCrop {
     }
 
     /**
-     * Retrieve cropped image aspect ratio from the result Intent
-     *
-     * @param intent crop result intent
-     * @return aspect ratio as a floating point value (x:y) - so it will be 1 for 1:1 or 4/3 for 4:3
-     */
-    public static float getOutputCropAspectRatio(@NonNull Intent intent) {
-        return intent.getParcelableExtra(EXTRA_OUTPUT_CROP_ASPECT_RATIO);
-    }
-
-    /**
      * Method retrieves error from the result intent.
      *
      * @param result crop result Intent
