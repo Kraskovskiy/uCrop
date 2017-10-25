@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IdRes;
 import android.support.annotation.IntDef;
@@ -149,7 +150,12 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
         setImageData(intent);
         setInitialState();
         addBlockingView();
-        mGestureCropImageView.setImageToWrapCropBounds(); //fix wrong crop calc size
+        (new Handler()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mGestureCropImageView.setImageToWrapCropBounds();
+            }
+        }, 350);  //fix wrong crop calc size
     }
 
     @Override
