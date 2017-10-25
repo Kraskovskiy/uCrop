@@ -149,6 +149,7 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
         setImageData(intent);
         setInitialState();
         addBlockingView();
+        mGestureCropImageView.setImageToWrapCropBounds(); //fix wrong crop calc size
     }
 
     @Override
