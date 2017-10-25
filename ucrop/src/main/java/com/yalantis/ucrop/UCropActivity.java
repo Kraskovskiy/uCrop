@@ -156,9 +156,9 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
             (new Handler()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    rotateByAngle(0);
+                    postAction();
                 }
-            }, 450);  //fix wrong crop calc size
+            }, 550);  //fix wrong crop calc size
         }
     }
 
@@ -610,6 +610,12 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
 
     private void resetRotation() {
         mGestureCropImageView.postRotate(-mGestureCropImageView.getCurrentAngle());
+        mGestureCropImageView.setTargetAspectRatio(GestureCropImageView.DEFAULT_ASPECT_RATIO);
+        mGestureCropImageView.zoomInImage(mGestureCropImageView.getCurrentScale()*0.8f);
+        mGestureCropImageView.setImageToWrapCropBounds();
+    }
+
+    private void postAction() {
         mGestureCropImageView.setTargetAspectRatio(GestureCropImageView.DEFAULT_ASPECT_RATIO);
         mGestureCropImageView.zoomInImage(mGestureCropImageView.getCurrentScale()*0.8f);
         mGestureCropImageView.setImageToWrapCropBounds();
