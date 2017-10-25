@@ -1,5 +1,6 @@
 package com.yalantis.ucrop;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -150,12 +151,15 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
         setImageData(intent);
         setInitialState();
         addBlockingView();
-        (new Handler()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mGestureCropImageView.setImageToWrapCropBounds();
-            }
-        }, 350);  //fix wrong crop calc size
+
+        if (intent.getBooleanExtra(UCrop.Options.EXTRA_FLAG_POST_ACTION, false)) {
+            (new Handler()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    rotateByAngle(0);
+                }
+            }, 450);  //fix wrong crop calc size
+        }
     }
 
     @Override
@@ -718,7 +722,7 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
     }
 
     private void showDelayMessageDialog(View anchor) {
-        PopupMenuView menuView = new PopupMenuView(this, R.menu.ucrop_delay_message_dialog, new MenuBuilder(this));
+        @SuppressLint("RestrictedApi") PopupMenuView menuView = new PopupMenuView(this, R.menu.ucrop_delay_message_dialog, new MenuBuilder(this));
         menuView.setInputMethodMode(PopupWindow.INPUT_METHOD_NOT_NEEDED);
         menuView.setOrientation(LinearLayout.VERTICAL);
         menuView.setOnMenuClickListener(new OptionMenuView.OnOptionMenuClickListener() {

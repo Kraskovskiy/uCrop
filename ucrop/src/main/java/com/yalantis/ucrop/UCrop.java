@@ -264,6 +264,7 @@ public class UCrop {
         public static final String EXTRA_ASPECT_RATIO_OPTIONS = EXTRA_PREFIX + ".AspectRatioOptions";
         public static final String EXTRA_SHOW_DESCRIPTIONS = EXTRA_PREFIX + ".descriptionsOptions";
         public static final String EXTRA_FLAG_SECURE = EXTRA_PREFIX + ".secureOptions";
+        public static final String EXTRA_FLAG_POST_ACTION = EXTRA_PREFIX + ".postActionOptions";
         public static final String EXTRA_DELAYED_OPTIONS = EXTRA_PREFIX + ".delayedOptions";
 
 
@@ -382,6 +383,13 @@ public class UCrop {
          */
         public void setFlagSecure(boolean secure) {
             mOptionBundle.putBoolean(EXTRA_FLAG_SECURE, secure);
+        }
+
+        /**
+         * @param postAction
+         */
+        public void setPostAction(boolean postAction) {
+            mOptionBundle.putBoolean(EXTRA_FLAG_POST_ACTION, postAction);
         }
 
         /**
