@@ -52,5 +52,5 @@ dependencies {
 
     compile 'com.shawnlin:number-picker:2.4.3'
     compile 'com.wdullaer:materialdatetimepicker:3.2.1'
-    compile 'com.github.igor-alyoshin:PopupMenuView:dev3-SNAPSHOT'
+    compile 'com.github.Kraskovskiy:PopupMenuView:dev3-SNAPSHOT'
 }
