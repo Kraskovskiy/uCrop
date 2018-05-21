@@ -205,7 +205,12 @@ public class ImageHeaderParser {
         segmentData.order(byteOrder);
 
         int firstIfdOffset = segmentData.getInt32(headerOffsetSize + 4) + headerOffsetSize;
-        int tagCount = segmentData.getInt16(firstIfdOffset);
+        int tagCount = 0;
+        try {
+            tagCount = segmentData.getInt16(firstIfdOffset);
+        } catch (IndexOutOfBoundsException ignore) {
+
+        }
 
         int tagOffset, tagType, formatCode, componentCount;
         for (int i = 0; i < tagCount; i++) {
