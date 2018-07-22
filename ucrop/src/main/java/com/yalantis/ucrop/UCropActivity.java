@@ -713,14 +713,21 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
     }
 
     protected void setResultUri(Uri uri, float resultAspectRatio, int imageWidth, int imageHeight) {
-        setResult(RESULT_OK, new Intent()
-                .putExtra(UCrop.EXTRA_OUTPUT_DELAYED_TIME, selectedDelayedMillis)
-                .putExtra(UCrop.EXTRA_OUTPUT_URI, uri)
-                .putExtra(UCrop.EXTRA_OUTPUT_CROP_ASPECT_RATIO, resultAspectRatio)
-                .putExtra(UCrop.EXTRA_OUTPUT_IMAGE_WIDTH, imageWidth)
-                .putExtra(UCrop.EXTRA_OUTPUT_IMAGE_HEIGHT, imageHeight)
-                .putExtra(UCrop.EXTRA_OUTPUT_IMAGE_DESCRIPTIONS, String.valueOf(mEditTextCaption.getText()))
-        );
+        Intent intent = getIntent();
+        boolean passIntent = intent.getBooleanExtra(UCrop.EXTRA_PASS_INTENT, false);
+        Intent data = new Intent();
+        if (passIntent) {
+            data.putExtras(intent);
+        }
+
+        data.putExtra(UCrop.EXTRA_OUTPUT_DELAYED_TIME, selectedDelayedMillis);
+        data.putExtra(UCrop.EXTRA_OUTPUT_URI, uri);
+        data.putExtra(UCrop.EXTRA_OUTPUT_CROP_ASPECT_RATIO, resultAspectRatio);
+        data.putExtra(UCrop.EXTRA_OUTPUT_IMAGE_WIDTH, imageWidth);
+        data.putExtra(UCrop.EXTRA_OUTPUT_IMAGE_HEIGHT, imageHeight);
+        data.putExtra(UCrop.EXTRA_OUTPUT_IMAGE_DESCRIPTIONS, String.valueOf(mEditTextCaption.getText()));
+
+        setResult(RESULT_OK, data);
     }
 
     protected void setResultError(Throwable throwable) {
