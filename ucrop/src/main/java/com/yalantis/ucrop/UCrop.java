@@ -20,6 +20,7 @@ import com.yalantis.ucrop.model.AspectRatio;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -206,8 +207,8 @@ public class UCrop {
      * @param intent crop result intent
      */
     @Nullable
-    public static long getOutputDelayedTime(@NonNull Intent intent) {
-        return intent.getLongExtra(EXTRA_OUTPUT_DELAYED_TIME, 0L);
+    public static Date getOutputDelayedTime(@NonNull Intent intent) {
+        return intent.getParcelableExtra(EXTRA_OUTPUT_DELAYED_TIME);
     }
 
     /**
