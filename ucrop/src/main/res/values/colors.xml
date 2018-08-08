@@ -2,21 +2,21 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--uCrop Activity-->
-    <color name="ucrop_color_toolbar">#e49900</color>
-    <color name="ucrop_color_statusbar">#c47700</color>
+    <color name="ucrop_color_toolbar">@color/ucrop_colorPrimary</color>
     <color name="ucrop_color_toolbar_widget">#fff</color>
     <color name="ucrop_color_widget">#000</color>
-    <color name="ucrop_color_widget_active">#e49900</color>
+    <color name="ucrop_color_widget_active">@color/ucrop_colorPrimary</color>
     <color name="ucrop_color_widget_background">#fff</color>
     <color name="ucrop_color_widget_text">#000</color>
     <color name="ucrop_color_progress_wheel_line">#808080</color>
     <color name="ucrop_color_crop_background">#000</color>
 
-    <color name="ucrop_colorOrange">#e49900</color>
     <color name="ucrop_colorGrayDark">#474747</color>
     <color name="ucrop_background_color">#88000000</color>
 
-    <color name="ucrop_colorPrimary">#8d685a</color>
+    <color name="ucrop_colorPrimary">#2855B9</color>
+    <color name="ucrop_colorStatusBar">#999999</color>
+
     <color name="ucrop_textColorPrimary">#ffffff</color>
     <color name="ucrop_textColorWhite">#ffffff</color>
     <color name="ucrop_textColorSecondary">#000</color>
