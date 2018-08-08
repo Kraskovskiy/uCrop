@@ -721,7 +721,8 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
             data.putExtras(intent);
         }
 
-        data.putExtra(UCrop.EXTRA_OUTPUT_DELAYED_TIME, mSelectedDate);
+        long dateLong = mSelectedDate != null ? mSelectedDate.getTime() : -1;
+        data.putExtra(UCrop.EXTRA_OUTPUT_DELAYED_TIME, dateLong);
         data.putExtra(UCrop.EXTRA_OUTPUT_URI, uri);
         data.putExtra(UCrop.EXTRA_OUTPUT_CROP_ASPECT_RATIO, resultAspectRatio);
         data.putExtra(UCrop.EXTRA_OUTPUT_IMAGE_WIDTH, imageWidth);

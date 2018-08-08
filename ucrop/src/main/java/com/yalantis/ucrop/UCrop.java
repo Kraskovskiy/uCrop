@@ -204,11 +204,16 @@ public class UCrop {
     /**
      * Retrieve EXTRA_OUTPUT_DELAYED_TIME from the result Intent
      *
-     * @param intent crop result intent
+     * @param intent crop result intent, long from Date
      */
-    @Nullable
     public static Date getOutputDelayedTime(@NonNull Intent intent) {
-        return intent.getParcelableExtra(EXTRA_OUTPUT_DELAYED_TIME);
+        long dateLong = intent.getLongExtra(EXTRA_OUTPUT_DELAYED_TIME, -1L);
+        if (dateLong == -1L) {
+            return null;
+        }
+        Date date = new Date();
+        date.setTime(dateLong);
+        return date;
     }
 
     /**
