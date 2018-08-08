@@ -51,6 +51,7 @@ import com.yalantis.ucrop.callback.BitmapCropCallback;
 import com.yalantis.ucrop.model.AspectRatio;
 import com.yalantis.ucrop.util.Action0;
 import com.yalantis.ucrop.util.Action1;
+import com.yalantis.ucrop.util.DateUtils;
 import com.yalantis.ucrop.util.SelectedStateListDrawable;
 import com.yalantis.ucrop.view.CropImageView;
 import com.yalantis.ucrop.view.GestureCropImageView;
@@ -64,6 +65,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -90,8 +92,7 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
     private final String TAG_DATE_PICKER_DIALOG = "TAG_DATE_PICKER_DIALOG";
     private final String TAG_TIME_PICKER_DIALOG = "TAG_TIME_PICKER_DIALOG";
 
-    private final int HOUR_MILLIS = 3600000;
-    private long selectedDelayedMillis;
+    private Date mSelectedDate;
 
     //date picker
     private int year;
@@ -230,7 +231,7 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_crop) {
-            selectedDelayedMillis = 0;
+            mSelectedDate = null;
             cropAndSaveImage();
         } else if (item.getItemId() == android.R.id.home) {
             onBackPressed();
@@ -720,7 +721,7 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
             data.putExtras(intent);
         }
 
-        data.putExtra(UCrop.EXTRA_OUTPUT_DELAYED_TIME, selectedDelayedMillis);
+        data.putExtra(UCrop.EXTRA_OUTPUT_DELAYED_TIME, mSelectedDate);
         data.putExtra(UCrop.EXTRA_OUTPUT_URI, uri);
         data.putExtra(UCrop.EXTRA_OUTPUT_CROP_ASPECT_RATIO, resultAspectRatio);
         data.putExtra(UCrop.EXTRA_OUTPUT_IMAGE_WIDTH, imageWidth);
@@ -741,20 +742,21 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
         menuView.setOnMenuClickListener(new OptionMenuView.OnOptionMenuClickListener() {
             @Override
             public boolean onOptionMenuClick(int position, OptionMenu menu) {
-                if (menu.getId() == R.id.ucrop_action_hour) {
-                    selectedDelayedMillis = HOUR_MILLIS;
+                int id = menu.getId();
+                if (id == R.id.ucrop_action_hour) {
+                    mSelectedDate = DateUtils.getNowWithHourOffset(1);
                     cropAndSaveImage();
                     return true;
-                } else if (menu.getId() == R.id.ucrop_action_several_hours) {
+                } else if (id == R.id.ucrop_action_several_hours) {
                     showSelectHoursDialog(UCropActivity.this, new SelectListener() {
                         @Override
                         public void onSelect(Integer hours) {
-                            selectedDelayedMillis = hours * HOUR_MILLIS;
+                            mSelectedDate = DateUtils.getNowWithHourOffset(hours);
                             cropAndSaveImage();
                         }
                     });
                     return true;
-                } else if (menu.getId() == R.id.ucrop_action_set_date) {
+                } else if (id == R.id.ucrop_action_set_date) {
                     showDatePicker();
                     return true;
                 } else {
@@ -904,10 +906,7 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
 
     @Override
     public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, day, hourOfDay, minute, second);
-        long time = calendar.getTimeInMillis();
-        selectedDelayedMillis = time - System.currentTimeMillis();
+        mSelectedDate = DateUtils.getDate(year, month, day, hourOfDay, minute, second);
         cropAndSaveImage();
     }
 
