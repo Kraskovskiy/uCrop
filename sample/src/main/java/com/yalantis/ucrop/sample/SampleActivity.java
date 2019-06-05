@@ -322,7 +322,7 @@ public class SampleActivity extends BaseActivity {
 
     private void handleCropResult(@NonNull Intent result) {
         final Uri resultUri = UCrop.getOutput(result);
-        long time = UCrop.getOutputDelayedTime(result);
+        long time = UCrop.getOutputDelayedTime(result).getTime();
         Toast.makeText(this, "Output delay: " + time, Toast.LENGTH_LONG).show();
         if (resultUri != null) {
             ResultActivity.startWithUri(SampleActivity.this, resultUri);

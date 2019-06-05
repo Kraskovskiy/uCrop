@@ -8,6 +8,7 @@ import android.graphics.Matrix;
 import android.graphics.Point;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,7 +35,7 @@ public class BitmapLoadUtils {
                                                 int requiredWidth, int requiredHeight,
                                                 BitmapLoadCallback loadCallback) {
 
-        new BitmapLoadTask(context, uri, outputUri, requiredWidth, requiredHeight, loadCallback).execute();
+        new BitmapLoadTask(context, uri, outputUri, requiredWidth, requiredHeight, loadCallback).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     public static Bitmap transformBitmap(@NonNull Bitmap bitmap, @NonNull Matrix transformMatrix) {
