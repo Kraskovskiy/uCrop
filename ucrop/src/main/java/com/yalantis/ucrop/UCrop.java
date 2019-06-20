@@ -275,6 +275,8 @@ public class UCrop {
         public static final String EXTRA_FLAG_POST_ACTION = EXTRA_PREFIX + ".postActionOptions";
         public static final String EXTRA_DELAYED_OPTIONS = EXTRA_PREFIX + ".delayedOptions";
 
+        public static final String EXTRA_INPUT_IMAGE_DESCRIPTIONS = EXTRA_PREFIX + ".InputDescriptions";
+
 
         private final Bundle mOptionBundle;
 

@@ -339,6 +339,10 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
             mGestureCropImageView.setMaxResultImageSizeX(maxSizeX);
             mGestureCropImageView.setMaxResultImageSizeY(maxSizeY);
         }
+
+        if (intent.hasExtra(UCrop.Options.EXTRA_INPUT_IMAGE_DESCRIPTIONS)) {
+            mEditTextCaption.setText(intent.getStringExtra(UCrop.Options.EXTRA_INPUT_IMAGE_DESCRIPTIONS));
+        }
     }
 
     private void setupViews(@NonNull Intent intent) {
