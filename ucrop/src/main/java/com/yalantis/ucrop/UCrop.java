@@ -542,6 +542,9 @@ public class UCrop {
             mOptionBundle.putInt(EXTRA_MAX_SIZE_Y, height);
         }
 
+        public void setDescription(String description) {
+            mOptionBundle.putString(EXTRA_INPUT_IMAGE_DESCRIPTIONS, description);
+        }
     }
 
 }
