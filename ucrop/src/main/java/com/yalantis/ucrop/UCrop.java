@@ -279,7 +279,7 @@ public class UCrop {
 
         public static final String EXTRA_DATE_INPUT_ACTIVITY = EXTRA_PREFIX + ".DateInputActivity";
         public static final String EXTRA_DATE_INPUT_ACTIVITY_FIELD = EXTRA_PREFIX + ".DateInputField";
-        public static final String EXTRA_DELAY_DATE_ACTIVITY_RESULT_FIELD = EXTRA_PREFIX + ".DateResultField";
+        public static final String EXTRA_DATE_ACTIVITY_RESULT_FIELD = EXTRA_PREFIX + ".DateResultField";
 
 
         private final Bundle mOptionBundle;
@@ -548,6 +548,12 @@ public class UCrop {
 
         public void setDescription(String description) {
             mOptionBundle.putString(EXTRA_INPUT_IMAGE_DESCRIPTIONS, description);
+        }
+
+        public void setDateInputActivity(Class<?> cls, String inputFiledName, String resultFiledName) {
+            mOptionBundle.putString(EXTRA_DATE_INPUT_ACTIVITY, cls.getName());
+            mOptionBundle.putString(EXTRA_DATE_INPUT_ACTIVITY_FIELD, inputFiledName);
+            mOptionBundle.putString(EXTRA_DATE_ACTIVITY_RESULT_FIELD, resultFiledName);
         }
     }
 

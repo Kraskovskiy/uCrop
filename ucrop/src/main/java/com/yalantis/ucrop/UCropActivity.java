@@ -893,8 +893,8 @@ public class UCropActivity extends AppCompatActivity {
 
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == REQUEST_CODE_DATE_INPUT) {
-                if (getIntent().hasExtra(UCrop.Options.EXTRA_DELAY_DATE_ACTIVITY_RESULT_FIELD)) {
-                    mSelectedDate = (Date) data.getSerializableExtra(getIntent().getStringExtra(UCrop.Options.EXTRA_DELAY_DATE_ACTIVITY_RESULT_FIELD));
+                if (getIntent().hasExtra(UCrop.Options.EXTRA_DATE_ACTIVITY_RESULT_FIELD)) {
+                    mSelectedDate = (Date) data.getSerializableExtra(getIntent().getStringExtra(UCrop.Options.EXTRA_DATE_ACTIVITY_RESULT_FIELD));
                     cropAndSaveImage();
                 }
             }
