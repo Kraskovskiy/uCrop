@@ -277,6 +277,10 @@ public class UCrop {
 
         public static final String EXTRA_INPUT_IMAGE_DESCRIPTIONS = EXTRA_PREFIX + ".InputDescriptions";
 
+        public static final String EXTRA_DATE_INPUT_ACTIVITY = EXTRA_PREFIX + ".DateInputActivity";
+        public static final String EXTRA_DATE_INPUT_ACTIVITY_FIELD = EXTRA_PREFIX + ".DateInputField";
+        public static final String EXTRA_DELAY_DATE_ACTIVITY_RESULT_FIELD = EXTRA_PREFIX + ".DateResultField";
+
 
         private final Bundle mOptionBundle;
 

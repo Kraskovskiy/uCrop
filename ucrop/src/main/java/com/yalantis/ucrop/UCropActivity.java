@@ -45,8 +45,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.shawnlin.numberpicker.NumberPicker;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.yalantis.ucrop.callback.BitmapCropCallback;
 import com.yalantis.ucrop.model.AspectRatio;
 import com.yalantis.ucrop.util.Action0;
@@ -64,7 +62,6 @@ import com.yalantis.ucrop.view.widget.HorizontalProgressWheelView;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -79,7 +76,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  */
 
 @SuppressWarnings("ConstantConditions")
-public class UCropActivity extends AppCompatActivity implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
+public class UCropActivity extends AppCompatActivity {
 
     public static final int DEFAULT_COMPRESS_QUALITY = 90;
     public static final Bitmap.CompressFormat DEFAULT_COMPRESS_FORMAT = Bitmap.CompressFormat.JPEG;
@@ -89,15 +86,8 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
     public static final int ROTATE = 2;
     public static final int ALL = 3;
 
-    private final String TAG_DATE_PICKER_DIALOG = "TAG_DATE_PICKER_DIALOG";
-    private final String TAG_TIME_PICKER_DIALOG = "TAG_TIME_PICKER_DIALOG";
 
     private Date mSelectedDate;
-
-    //date picker
-    private int year;
-    private int month;
-    private int day;
 
     @IntDef({NONE, SCALE, ROTATE, ALL})
     @Retention(RetentionPolicy.SOURCE)
@@ -110,6 +100,8 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
     private static final int TABS_COUNT = 3;
     private static final int SCALE_WIDGET_SENSITIVITY_COEFFICIENT = 15000;
     private static final int ROTATE_WIDGET_SENSITIVITY_COEFFICIENT = 42;
+
+    private static final int REQUEST_CODE_DATE_INPUT = 666;
 
     private String mToolbarTitle;
 
@@ -616,20 +608,20 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
     private void resetRotation() {
         mGestureCropImageView.postRotate(-mGestureCropImageView.getCurrentAngle());
         mGestureCropImageView.setTargetAspectRatio(GestureCropImageView.DEFAULT_ASPECT_RATIO);
-        mGestureCropImageView.zoomInImage(mGestureCropImageView.getCurrentScale()*0.8f);
+        mGestureCropImageView.zoomInImage(mGestureCropImageView.getCurrentScale() * 0.8f);
         mGestureCropImageView.setImageToWrapCropBounds();
     }
 
     private void postAction() {
         mGestureCropImageView.setTargetAspectRatio(GestureCropImageView.DEFAULT_ASPECT_RATIO);
-        mGestureCropImageView.zoomInImage(mGestureCropImageView.getCurrentScale()*0.8f);
+        mGestureCropImageView.zoomInImage(mGestureCropImageView.getCurrentScale() * 0.8f);
         mGestureCropImageView.setImageToWrapCropBounds();
     }
 
     private void rotateByAngle(int angle) {
         mGestureCropImageView.postRotate(angle);
         mGestureCropImageView.setTargetAspectRatio(mGestureCropImageView.getInvertTargetAspectRatio());
-        mGestureCropImageView.zoomInImage(mGestureCropImageView.getCurrentScale()*0.8f);
+        mGestureCropImageView.zoomInImage(mGestureCropImageView.getCurrentScale() * 0.8f);
         mGestureCropImageView.setImageToWrapCropBounds();
     }
 
@@ -762,8 +754,25 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
                     });
                     return true;
                 } else if (id == R.id.ucrop_action_set_date) {
-                    showDatePicker();
-                    return true;
+                    if (getIntent() != null && getIntent().hasExtra(UCrop.Options.EXTRA_DATE_INPUT_ACTIVITY)) {
+                        try {
+                            Class<? extends Activity> activityClass =
+                                    (Class<? extends Activity>) getClassLoader().loadClass(getIntent().getStringExtra(UCrop.Options.EXTRA_DATE_INPUT_ACTIVITY));
+                            Intent intent = new Intent(UCropActivity.this, activityClass);
+                            if (getIntent().hasExtra(UCrop.Options.EXTRA_DATE_INPUT_ACTIVITY_FIELD)) {
+                                intent.putExtra(getIntent().getStringExtra(UCrop.Options.EXTRA_DATE_INPUT_ACTIVITY_FIELD), mSelectedDate);
+                            }
+                            startActivityForResult(intent, REQUEST_CODE_DATE_INPUT);
+                        } catch (Exception e) {
+                            Log.e(TAG, "Cant start date enter activity");
+                            return false;
+                        }
+
+                        return true;
+                    } else {
+                        Log.e(TAG, "Input date activity is unset");
+                        return false;
+                    }
                 } else {
                     return false;
                 }
@@ -874,49 +883,21 @@ public class UCropActivity extends AppCompatActivity implements TimePickerDialog
         alertDialog.show();
     }
 
-    private void showDatePicker() {
-        Calendar now = Calendar.getInstance();
-        DatePickerDialog dpd = DatePickerDialog.newInstance(
-                this,
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
-        );
-        dpd.setAccentColor(getResources().getColor(R.color.ucrop_color_toolbar));
-        dpd.setMinDate(now);
-        dpd.dismissOnPause(true);
-        dpd.show(getFragmentManager(), TAG_DATE_PICKER_DIALOG);
-    }
-
-    private void showTimePicker() {
-        Calendar now = Calendar.getInstance();
-        TimePickerDialog dpd = TimePickerDialog.newInstance(
-                this,
-                now.get(Calendar.HOUR_OF_DAY),
-                now.get(Calendar.MINUTE),
-                true
-        );
-        dpd.setAccentColor(getResources().getColor(R.color.ucrop_color_toolbar));
-        dpd.dismissOnPause(true);
-        dpd.show(getFragmentManager(), TAG_TIME_PICKER_DIALOG);
-    }
-
-    @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        this.year = year;
-        this.month = monthOfYear;
-        this.day = dayOfMonth;
-        showTimePicker();
-    }
-
-    @Override
-    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
-        mSelectedDate = DateUtils.getDate(year, month, day, hourOfDay, minute, second);
-        cropAndSaveImage();
-    }
-
     private interface SelectListener {
         void onSelect(Integer value);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == REQUEST_CODE_DATE_INPUT) {
+                if (getIntent().hasExtra(UCrop.Options.EXTRA_DELAY_DATE_ACTIVITY_RESULT_FIELD)) {
+                    mSelectedDate = (Date) data.getSerializableExtra(getIntent().getStringExtra(UCrop.Options.EXTRA_DELAY_DATE_ACTIVITY_RESULT_FIELD));
+                    cropAndSaveImage();
+                }
+            }
+        }
+    }
 }
