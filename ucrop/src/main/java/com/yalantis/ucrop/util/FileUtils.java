@@ -31,6 +31,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -225,6 +226,20 @@ public class FileUtils {
         FileChannel inputChannel = null;
         try {
             inputChannel = new FileInputStream(new File(pathFrom)).getChannel();
+            outputChannel = new FileOutputStream(new File(pathTo)).getChannel();
+            inputChannel.transferTo(0, inputChannel.size(), outputChannel);
+            inputChannel.close();
+        } finally {
+            if (inputChannel != null) inputChannel.close();
+            if (outputChannel != null) outputChannel.close();
+        }
+    }
+
+    public static void copyFile(@NonNull FileDescriptor input, @NonNull String pathTo) throws IOException {
+        FileChannel outputChannel = null;
+        FileChannel inputChannel = null;
+        try {
+            inputChannel = new FileInputStream(input).getChannel();
             outputChannel = new FileOutputStream(new File(pathTo)).getChannel();
             inputChannel.transferTo(0, inputChannel.size(), outputChannel);
             inputChannel.close();

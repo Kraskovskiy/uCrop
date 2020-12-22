@@ -7,6 +7,7 @@ import android.graphics.RectF;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -49,7 +50,8 @@ public class BitmapCropTask extends AsyncTask<Void, Void, Throwable> {
 
     private final Bitmap.CompressFormat mCompressFormat;
     private final int mCompressQuality;
-    private final String mImageInputPath, mImageOutputPath;
+    private Uri mImageInput;
+    private final String mImageOutputPath;
     private final ExifInfo mExifInfo;
     private final BitmapCropCallback mCropCallback;
 
@@ -72,7 +74,7 @@ public class BitmapCropTask extends AsyncTask<Void, Void, Throwable> {
         mCompressFormat = cropParameters.getCompressFormat();
         mCompressQuality = cropParameters.getCompressQuality();
 
-        mImageInputPath = cropParameters.getImageInputPath();
+        mImageInput = cropParameters.getImageInput();
         mImageOutputPath = cropParameters.getImageOutputPath();
         mExifInfo = cropParameters.getExifInfo();
 
@@ -147,28 +149,37 @@ public class BitmapCropTask extends AsyncTask<Void, Void, Throwable> {
         boolean shouldCrop = shouldCrop(mCroppedImageWidth, mCroppedImageHeight);
         Log.i(TAG, "Should crop: " + shouldCrop);
 
+
+        ExifInterface originalExif;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            ParcelFileDescriptor input = mContext.get().getContentResolver().openFileDescriptor(mImageInput, "r");
+            originalExif = new ExifInterface(input.getFileDescriptor());
+        } else {
+            originalExif = new ExifInterface(mImageInput.getPath());
+        }
+
         if (shouldCrop) {
             saveImage(Bitmap.createBitmap(mViewBitmap, left, top, mCroppedImageWidth, mCroppedImageHeight));
-            ExifInterface originalExif = new ExifInterface(mImageInputPath);
             if (mCompressFormat.equals(Bitmap.CompressFormat.JPEG)) {
                 ImageHeaderParser.copyExif(originalExif, mCroppedImageWidth, mCroppedImageHeight, mImageOutputPath);
             }
-            return true;
         } else {
-            ExifInterface originalExif = new ExifInterface(mImageInputPath);
-            int orientation = originalExif.getAttributeInt(
-                    ExifInterface.TAG_ORIENTATION,
-                    ExifInterface.ORIENTATION_NORMAL);
+            int orientation = originalExif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
             if (orientation != 0) {
                 saveImage(Bitmap.createBitmap(mViewBitmap, left, top, mCroppedImageWidth, mCroppedImageHeight));
                 if (mCompressFormat.equals(Bitmap.CompressFormat.JPEG)) {
                     ImageHeaderParser.copyExif(originalExif, mViewBitmap.getWidth(), mViewBitmap.getHeight(), mImageOutputPath);
                 }
             } else {
-                FileUtils.copyFile(mImageInputPath, mImageOutputPath);
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                    ParcelFileDescriptor input = mContext.get().getContentResolver().openFileDescriptor(mImageInput, "r");
+                    FileUtils.copyFile(input.getFileDescriptor(), mImageOutputPath);
+                } else {
+                    FileUtils.copyFile(mImageInput.getPath(), mImageOutputPath);
+                }
             }
-            return true;
         }
+        return true;
     }
 
     private void saveImage(@NonNull Bitmap croppedBitmap) throws FileNotFoundException {

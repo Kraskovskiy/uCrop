@@ -52,7 +52,8 @@ public class TransformImageView extends ImageView {
 
     private int mMaxBitmapSize = 0;
 
-    private String mImageInputPath, mImageOutputPath;
+    private Uri mImageInput;
+    private String mImageOutputPath;
     private ExifInfo mExifInfo;
 
     /**
@@ -118,8 +119,8 @@ public class TransformImageView extends ImageView {
         setImageDrawable(new FastBitmapDrawable(bitmap));
     }
 
-    public String getImageInputPath() {
-        return mImageInputPath;
+    public Uri getImageInput() {
+        return mImageInput;
     }
 
     public String getImageOutputPath() {
@@ -143,8 +144,8 @@ public class TransformImageView extends ImageView {
                 new BitmapLoadCallback() {
 
                     @Override
-                    public void onBitmapLoaded(@NonNull Bitmap bitmap, @NonNull ExifInfo exifInfo, @NonNull String imageInputPath, @Nullable String imageOutputPath) {
-                        mImageInputPath = imageInputPath;
+                    public void onBitmapLoaded(@NonNull Bitmap bitmap, @NonNull ExifInfo exifInfo, @NonNull Uri imageInput, @Nullable String imageOutputPath) {
+                        mImageInput = imageInput;
                         mImageOutputPath = imageOutputPath;
                         mExifInfo = exifInfo;
 
