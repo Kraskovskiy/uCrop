@@ -65,7 +65,7 @@
             android:layout_marginStart="@dimen/ucrop_padding_crop_frame"
             android:layout_marginTop="@dimen/ucrop_padding_crop_frame">
 
-            <android.support.v7.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/ucrop_btnNo"
                 fontPath="fonts/Roboto.ttf"
                 android:layout_width="0dp"
@@ -81,7 +81,7 @@
                 tools:ignore="MissingPrefix"
                 tools:visibility="visible" />
 
-            <android.support.v7.widget.AppCompatButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/ucrop_btnYes"
                 fontPath="fonts/Roboto.ttf"
                 android:layout_width="0dp"

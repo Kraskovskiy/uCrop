@@ -11,15 +11,15 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.NotificationCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
 
 import com.yalantis.ucrop.view.UCropView;
 
@@ -49,7 +49,7 @@ public class ResultActivity extends BaseActivity {
         setContentView(R.layout.activity_result);
 
         try {
-            UCropView uCropView = (UCropView) findViewById(R.id.ucrop);
+            UCropView uCropView = findViewById(R.id.ucrop);
             uCropView.getCropImageView().setImageUri(getIntent().getData(), null);
             uCropView.getOverlayView().setShowCropFrame(false);
             uCropView.getOverlayView().setShowCropGrid(false);
@@ -63,7 +63,7 @@ public class ResultActivity extends BaseActivity {
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(new File(getIntent().getData().getPath()).getAbsolutePath(), options);
 
-        setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+        setSupportActionBar(findViewById(R.id.toolbar));
         final ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);

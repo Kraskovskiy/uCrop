@@ -5,14 +5,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -20,12 +16,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
 import java.io.File;
-import java.util.Locale;
-import java.util.Random;
+import java.util.Date;
 
 /**
  * Created by Oleksii Shliama (https://github.com/shliama).
@@ -50,19 +48,19 @@ public class SampleActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample);
-
         setupUI();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_SELECT_PICTURE) {
                 final Uri selectedUri = data.getData();
                 if (selectedUri != null) {
-                    startCropActivity(data.getData());
+                    startCropActivity(selectedUri);
                 } else {
-                    Toast.makeText(SampleActivity.this, R.string.toast_cannot_retrieve_selected_image, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.toast_cannot_retrieve_selected_image, Toast.LENGTH_SHORT).show();
                 }
             } else if (requestCode == UCrop.REQUEST_CROP) {
                 handleCropResult(data);
@@ -91,45 +89,24 @@ public class SampleActivity extends BaseActivity {
 
     @SuppressWarnings("ConstantConditions")
     private void setupUI() {
-        findViewById(R.id.button_crop).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pickFromGallery();
-            }
-        });
-        findViewById(R.id.button_random_image).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Random random = new Random();
-                int minSizePixels = 800;
-                int maxSizePixels = 2400;
-                startCropActivity(Uri.parse(String.format(Locale.getDefault(), "https://unsplash.it/%d/%d/?random",
-                        minSizePixels + random.nextInt(maxSizePixels - minSizePixels),
-                        minSizePixels + random.nextInt(maxSizePixels - minSizePixels))));
-            }
-        });
+        findViewById(R.id.button_crop).setOnClickListener(v -> pickFromGallery());
 
-        mRadioGroupAspectRatio = ((RadioGroup) findViewById(R.id.radio_group_aspect_ratio));
-        mRadioGroupCompressionSettings = ((RadioGroup) findViewById(R.id.radio_group_compression_settings));
-        mCheckBoxMaxSize = ((CheckBox) findViewById(R.id.checkbox_max_size));
-        mEditTextRatioX = ((EditText) findViewById(R.id.edit_text_ratio_x));
-        mEditTextRatioY = ((EditText) findViewById(R.id.edit_text_ratio_y));
-        mEditTextMaxWidth = ((EditText) findViewById(R.id.edit_text_max_width));
-        mEditTextMaxHeight = ((EditText) findViewById(R.id.edit_text_max_height));
-        mSeekBarQuality = ((SeekBar) findViewById(R.id.seekbar_quality));
-        mTextViewQuality = ((TextView) findViewById(R.id.text_view_quality));
-        mCheckBoxHideBottomControls = ((CheckBox) findViewById(R.id.checkbox_hide_bottom_controls));
-        mCheckBoxFreeStyleCrop = ((CheckBox) findViewById(R.id.checkbox_freestyle_crop));
+        mRadioGroupAspectRatio = findViewById(R.id.radio_group_aspect_ratio);
+        mRadioGroupCompressionSettings = findViewById(R.id.radio_group_compression_settings);
+        mCheckBoxMaxSize = findViewById(R.id.checkbox_max_size);
+        mEditTextRatioX = findViewById(R.id.edit_text_ratio_x);
+        mEditTextRatioY = findViewById(R.id.edit_text_ratio_y);
+        mEditTextMaxWidth = findViewById(R.id.edit_text_max_width);
+        mEditTextMaxHeight = findViewById(R.id.edit_text_max_height);
+        mSeekBarQuality = findViewById(R.id.seekbar_quality);
+        mTextViewQuality = findViewById(R.id.text_view_quality);
+        mCheckBoxHideBottomControls = findViewById(R.id.checkbox_hide_bottom_controls);
+        mCheckBoxFreeStyleCrop = findViewById(R.id.checkbox_freestyle_crop);
 
         mRadioGroupAspectRatio.check(R.id.radio_dynamic);
         mEditTextRatioX.addTextChangedListener(mAspectRatioTextWatcher);
         mEditTextRatioY.addTextChangedListener(mAspectRatioTextWatcher);
-        mRadioGroupCompressionSettings.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                mSeekBarQuality.setEnabled(checkedId == R.id.radio_jpeg);
-            }
-        });
+        mRadioGroupCompressionSettings.setOnCheckedChangeListener((group, checkedId) -> mSeekBarQuality.setEnabled(checkedId == R.id.radio_jpeg));
         mRadioGroupCompressionSettings.check(R.id.radio_jpeg);
         mSeekBarQuality.setProgress(UCropActivity.DEFAULT_COMPRESS_QUALITY);
         mTextViewQuality.setText(String.format(getString(R.string.format_quality_d), mSeekBarQuality.getProgress()));
@@ -151,7 +128,7 @@ public class SampleActivity extends BaseActivity {
         });
     }
 
-    private TextWatcher mAspectRatioTextWatcher = new TextWatcher() {
+    private final TextWatcher mAspectRatioTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             mRadioGroupAspectRatio.clearCheck();
@@ -169,18 +146,15 @@ public class SampleActivity extends BaseActivity {
     };
 
     private void pickFromGallery() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE,
                     getString(R.string.permission_read_storage_rationale),
                     REQUEST_STORAGE_READ_ACCESS_PERMISSION);
         } else {
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
             intent.addCategory(Intent.CATEGORY_OPENABLE);
-            startActivityForResult(Intent.createChooser(intent, getString(R.string.label_select_picture)), REQUEST_SELECT_PICTURE);
+            intent.setType("image/*");
+            startActivityForResult(intent, REQUEST_SELECT_PICTURE);
         }
     }
 
@@ -200,7 +174,7 @@ public class SampleActivity extends BaseActivity {
         uCrop = basisConfig(uCrop);
         uCrop = advancedConfig(uCrop);
 
-        uCrop.start(SampleActivity.this);
+        uCrop.start(this);
     }
 
     /**
@@ -222,8 +196,8 @@ public class SampleActivity extends BaseActivity {
                 break;
             default:
                 try {
-                    float ratioX = Float.valueOf(mEditTextRatioX.getText().toString().trim());
-                    float ratioY = Float.valueOf(mEditTextRatioY.getText().toString().trim());
+                    float ratioX = Float.parseFloat(mEditTextRatioX.getText().toString().trim());
+                    float ratioY = Float.parseFloat(mEditTextRatioY.getText().toString().trim());
                     if (ratioX > 0 && ratioY > 0) {
                         uCrop = uCrop.withAspectRatio(ratioX, ratioY);
                     }
@@ -235,8 +209,8 @@ public class SampleActivity extends BaseActivity {
 
         if (mCheckBoxMaxSize.isChecked()) {
             try {
-                int maxWidth = Integer.valueOf(mEditTextMaxWidth.getText().toString().trim());
-                int maxHeight = Integer.valueOf(mEditTextMaxHeight.getText().toString().trim());
+                int maxWidth = Integer.parseInt(mEditTextMaxWidth.getText().toString().trim());
+                int maxHeight = Integer.parseInt(mEditTextMaxHeight.getText().toString().trim());
                 if (maxWidth > 0 && maxHeight > 0) {
                     uCrop = uCrop.withMaxResultSize(maxWidth, maxHeight);
                 }
@@ -322,8 +296,12 @@ public class SampleActivity extends BaseActivity {
 
     private void handleCropResult(@NonNull Intent result) {
         final Uri resultUri = UCrop.getOutput(result);
-        long time = UCrop.getOutputDelayedTime(result).getTime();
-        Toast.makeText(this, "Output delay: " + time, Toast.LENGTH_LONG).show();
+
+        Date date = UCrop.getOutputDelayedTime(result);
+        if (date != null) {
+            Toast.makeText(this, "Output delay: " + date.getTime(), Toast.LENGTH_LONG).show();
+        }
+
         if (resultUri != null) {
             ResultActivity.startWithUri(SampleActivity.this, resultUri);
         } else {
@@ -341,5 +319,4 @@ public class SampleActivity extends BaseActivity {
             Toast.makeText(SampleActivity.this, R.string.toast_unexpected_error, Toast.LENGTH_SHORT).show();
         }
     }
-
 }

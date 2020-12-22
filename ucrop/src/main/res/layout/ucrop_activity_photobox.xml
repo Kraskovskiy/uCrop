@@ -7,7 +7,7 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,7 +31,7 @@
             android:textSize="@dimen/ucrop_textSize40"
             tools:ignore="MissingPrefix" />
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <RelativeLayout
         android:id="@+id/ucrop_frame"
@@ -60,7 +60,7 @@
 
         </com.yalantis.ucrop.view.UCropView>
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/ucrop_TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,7 +80,8 @@
                 android:inputType="textCapSentences"
                 android:maxLines="1"
                 android:textColor="@color/ucrop_textColorWhite" />
-        </android.support.design.widget.TextInputLayout>
+
+        </com.google.android.material.textfield.TextInputLayout>
 
     </RelativeLayout>
 
