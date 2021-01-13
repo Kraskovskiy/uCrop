@@ -261,7 +261,8 @@ public class UCropActivity extends AppCompatActivity {
         }
     }
 
-    /**o
+    /**
+     * o
      * This method extracts {@link com.yalantis.ucrop.UCrop.Options #optionsBundle} from incoming intent
      * and setups Activity, {@link OverlayView} and {@link CropImageView} properly.
      */
@@ -728,7 +729,10 @@ public class UCropActivity extends AppCompatActivity {
     }
 
     protected void setResultError(Throwable throwable) {
-        setResult(UCrop.RESULT_ERROR, new Intent().putExtra(UCrop.EXTRA_ERROR, throwable));
+        setResult(UCrop.RESULT_ERROR, new Intent()
+                .putExtra(UCrop.EXTRA_ERROR, throwable)
+                .putExtra(UCrop.EXTRA_INPUT_URI, getIntent().getParcelableExtra(UCrop.EXTRA_INPUT_URI))
+        );
     }
 
     private void showDelayMessageDialog(View anchor) {
